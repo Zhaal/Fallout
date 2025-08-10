@@ -484,6 +484,122 @@
         .nuka-popup button:hover {
             transform: scale(1.1);
         }
+
+        /* --- BOUTON BIOMÉTRIQUE --- */
+        .biometric-button {
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background: #ff0000;
+            border: 2px solid #ff0000;
+            color: #fff;
+            cursor: pointer;
+            text-shadow: 0 0 5px #fff, 0 0 10px #ff0000;
+            box-shadow: 0 0 15px #ff0000, 0 0 20px #ff0000 inset;
+            animation: blink-red 1s infinite step-end;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes blink-red {
+            50% {
+                background: #a00;
+                box-shadow: 0 0 15px #a00, 0 0 20px #a00 inset;
+            }
+        }
+
+        /* --- MODAL S.P.E.C.I.A.L. --- */
+        #special-modal {
+            background: var(--color-dark-grey);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 20px var(--primary-color);
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        #special-modal h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        #special-modal p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .special-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-color);
+            padding: 5px 10px;
+            border: 1px solid var(--dark-color);
+        }
+
+        .stat-name {
+            font-size: 1.5rem;
+        }
+
+        .stat-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-controls button {
+            font-family: inherit;
+            font-size: 1.5rem;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 0;
+            margin: 0 10px;
+        }
+
+        .stat-controls button:hover {
+            background: var(--primary-color);
+            color: var(--color-black);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        #special-confirm-btn {
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: var(--color-black);
+            cursor: pointer;
+            margin-top: 10px;
+            text-shadow: none;
+        }
+
+        #special-confirm-btn:hover {
+            background: var(--dark-color);
+            color: var(--primary-color);
+        }
+
     </style>
 </head>
 <body>
@@ -583,6 +699,18 @@
         </div>
     </div>
 
+    <!-- MODAL S.P.E.C.I.A.L. -->
+    <div class="modal-overlay" id="special-modal-overlay">
+        <div id="special-modal">
+            <h2>S.P.E.C.I.A.L.</h2>
+            <p>Créez votre personnage. Vous avez <span id="points-to-spend">21</span> points à répartir.</p>
+            <div class="special-stats">
+                <!-- Les stats seront générées par JS -->
+            </div>
+            <button id="special-confirm-btn">Valider la création</button>
+        </div>
+    </div>
+
     <!-- EFFETS SONORES -->
     <audio id="audio-connect" src="Connect-pipboy.wav" preload="auto"></audio>
     <audio id="audio-protected" src="accès-protégé.wav" preload="auto"></audio>
@@ -619,6 +747,12 @@
 
             const nukaPopupOverlay = document.getElementById('nuka-popup-overlay');
             const nukaCloseBtn = document.getElementById('nuka-close-btn');
+
+            const specialModalOverlay = document.getElementById('special-modal-overlay');
+            const specialConfirmBtn = document.getElementById('special-confirm-btn');
+            const specialStatsContainer = document.querySelector('.special-stats');
+            const pointsToSpendEl = document.getElementById('points-to-spend');
+
 
             // --- FONCTION SON ---
             function playSound(id) {
@@ -976,7 +1110,20 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                             signButton.addEventListener('click', () => {
                                 textContentElement.style.opacity = '0';
                                 setTimeout(() => {
-                                    typeWriter(officialDocument);
+                                    typeWriter(officialDocument, () => {
+                                        // Créer et ajouter le bouton biométrique
+                                        const biometricButton = document.createElement('button');
+                                        biometricButton.textContent = 'Enregistrement Biométrique';
+                                        biometricButton.className = 'biometric-button';
+
+                                        biometricButton.addEventListener('click', () => {
+                                            playSound('audio-button');
+                                            initializeSpecialModal();
+                                            specialModalOverlay.classList.add('visible');
+                                        });
+
+                                        textContentElement.appendChild(biometricButton);
+                                    });
                                     textContentElement.style.opacity = '1';
                                 }, 500);
                             });
@@ -1052,6 +1199,73 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     playSound('audio-mdp-no');
                 }
             }
+
+            // --- LOGIQUE S.P.E.C.I.A.L. ---
+            let pointsToSpend = 21;
+            const stats = {
+                S: { name: 'Strength', value: 1 },
+                P: { name: 'Perception', value: 1 },
+                E: { name: 'Endurance', value: 1 },
+                C: { name: 'Charisma', value: 1 },
+                I: { name: 'Intelligence', value: 1 },
+                A: { name: 'Agility', value: 1 },
+                L: { name: 'Luck', value: 1 }
+            };
+
+            function initializeSpecialModal() {
+                pointsToSpend = 21;
+                Object.keys(stats).forEach(key => stats[key].value = 1);
+                renderSpecialStats();
+            }
+
+            function renderSpecialStats() {
+                specialStatsContainer.innerHTML = '';
+                pointsToSpendEl.textContent = pointsToSpend;
+
+                for (const [key, stat] of Object.entries(stats)) {
+                    const statEl = document.createElement('div');
+                    statEl.className = 'stat';
+                    statEl.innerHTML = `
+                        <span class="stat-name">${key} (${stat.name})</span>
+                        <div class="stat-controls">
+                            <button data-stat="${key}" data-action="minus">-</button>
+                            <span class="stat-value">${stat.value}</span>
+                            <button data-stat="${key}" data-action="plus">+</button>
+                        </div>
+                    `;
+                    specialStatsContainer.appendChild(statEl);
+                }
+            }
+
+            specialStatsContainer.addEventListener('click', e => {
+                const button = e.target.closest('button');
+                if (!button) return;
+
+                const statKey = button.dataset.stat;
+                const action = button.dataset.action;
+
+                if (action === 'plus' && pointsToSpend > 0 && stats[statKey].value < 10) {
+                    stats[statKey].value++;
+                    pointsToSpend--;
+                } else if (action === 'minus' && stats[statKey].value > 1) {
+                    stats[statKey].value--;
+                    pointsToSpend++;
+                }
+                playSound('audio-key');
+                renderSpecialStats();
+            });
+
+            specialConfirmBtn.addEventListener('click', () => {
+                if (pointsToSpend > 0) {
+                    alert('Vous devez dépenser tous vos points !');
+                    return;
+                }
+                // Ici, vous pouvez sauvegarder les stats du personnage
+                console.log('Personnage créé :', stats);
+                specialModalOverlay.classList.remove('visible');
+                playSound('audio-mdp-ok');
+            });
+
 
             // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
             
