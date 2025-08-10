@@ -747,6 +747,11 @@
             text-shadow: 0 0 5px var(--color-error);
         }
 
+        /* --- STYLES MODAL PROMPT --- */
+        #prompt-form {
+            margin-top: 15px;
+        }
+
     </style>
 </head>
 <body>
@@ -904,6 +909,19 @@
         </div>
     </div>
 
+    <!-- MODAL DE SAISIE (PROMPT) -->
+    <div class="modal-overlay" id="prompt-modal-overlay">
+        <div id="prompt-modal" class="modal">
+            <h2 id="prompt-modal-title"></h2>
+            <p id="prompt-modal-body"></p>
+            <form id="prompt-form">
+                <input type="password" id="prompt-modal-input" autocomplete="off">
+                <button type="submit" id="prompt-modal-ok-btn">OK</button>
+                <button type="button" id="prompt-modal-cancel-btn">Annuler</button>
+            </form>
+        </div>
+    </div>
+
     <!-- EFFETS SONORES -->
     <audio id="audio-connect" src="Connect-pipboy.wav" preload="auto"></audio>
     <audio id="audio-protected" src="accès-protégé.wav" preload="auto"></audio>
@@ -960,6 +978,13 @@
             const alertModalTitle = document.getElementById('alert-modal-title');
             const alertModalBody = document.getElementById('alert-modal-body');
             const alertModalCloseBtn = document.getElementById('alert-modal-close-btn');
+
+            const promptModalOverlay = document.getElementById('prompt-modal-overlay');
+            const promptModalTitle = document.getElementById('prompt-modal-title');
+            const promptModalBody = document.getElementById('prompt-modal-body');
+            const promptForm = document.getElementById('prompt-form');
+            const promptModalInput = document.getElementById('prompt-modal-input');
+            const promptModalCancelBtn = document.getElementById('prompt-modal-cancel-btn');
 
 
             // --- FONCTION SON ---
@@ -1583,7 +1608,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     }
 
                     const result = await response.json();
-                    alert('Succès ! ' + result.message);
+                    showAlert('SUCCÈS', result.message);
 
                     specialModalOverlay.classList.remove('visible');
                     playSound('audio-mdp-ok');
@@ -1597,7 +1622,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
 
                 } catch (error) {
                     console.error('Erreur lors de la sauvegarde:', error);
-                    alert(`Échec de la sauvegarde en ligne. Erreur: ${error.message}\n\nLes données seront téléchargées localement comme solution de secours.`);
+                    showAlert('ERREUR', `Échec de la sauvegarde en ligne. Erreur: ${error.message}\n\nLes données seront téléchargées localement comme solution de secours.`, true);
                     // Fallback to local download
                     saveCharacterToFile(characterData);
                 } finally {
@@ -1629,17 +1654,17 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 const password = document.getElementById('character-password').value;
 
                 if (!lastname || !firstname) {
-                    alert('Veuillez renseigner le nom et les prénoms.');
+                    showAlert('ERREUR DE SAISIE', 'Veuillez renseigner le nom et les prénoms.', true);
                     return;
                 }
 
                 if (!password) {
-                    alert('Le mot de passe est obligatoire.');
+                    showAlert('ERREUR DE SAISIE', 'Le mot de passe est obligatoire.', true);
                     return;
                 }
 
                 if (pointsToSpend > 0) {
-                    alert('Vous devez dépenser tous vos points S.P.E.C.I.A.L. !');
+                    showAlert('ATTENTION', 'Vous devez dépenser tous vos points S.P.E.C.I.A.L. !', true);
                     return;
                 }
 
@@ -1667,6 +1692,36 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 alertModalTitle.classList.toggle('error-title', isError);
                 alertModalOverlay.classList.add('visible');
                 playSound(isError ? 'audio-mdp-no' : 'audio-protected');
+            }
+
+            function showPrompt(title, body) {
+                return new Promise((resolve) => {
+                    promptModalTitle.textContent = title;
+                    promptModalBody.textContent = body;
+                    promptModalInput.value = '';
+                    promptModalOverlay.classList.add('visible');
+                    promptModalInput.focus();
+
+                    const handleConfirm = (e) => {
+                        e.preventDefault();
+                        cleanup();
+                        resolve(promptModalInput.value);
+                    };
+
+                    const handleCancel = () => {
+                        cleanup();
+                        resolve(null);
+                    };
+
+                    const cleanup = () => {
+                        promptModalOverlay.classList.remove('visible');
+                        promptForm.removeEventListener('submit', handleConfirm);
+                        promptModalCancelBtn.removeEventListener('click', handleCancel);
+                    };
+
+                    promptForm.addEventListener('submit', handleConfirm);
+                    promptModalCancelBtn.addEventListener('click', handleCancel);
+                });
             }
 
 
@@ -1861,7 +1916,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     showInbox(result); // Show the inbox with the returned character data
 
                 } catch (error) {
-                    alert(`Échec de la connexion : ${error.message}`);
+                    showAlert('ERREUR DE CONNEXION', error.message, true);
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Connexion';
                 }
@@ -1873,11 +1928,11 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 playSound('audio-button');
                 const btn = e.target;
                 const characterId = btn.dataset.id;
-                const password = prompt(`Veuillez entrer le mot de passe pour supprimer ce personnage :`);
+                const password = await showPrompt('CONFIRMATION REQUISE', 'Veuillez entrer le mot de passe pour supprimer ce personnage :');
 
                 if (password === null) return; // User cancelled the prompt
                 if (!password) {
-                    alert('Le mot de passe est requis pour la suppression.');
+                    showAlert('ERREUR', 'Le mot de passe est requis pour la suppression.', true);
                     return;
                 }
 
@@ -1896,11 +1951,11 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                         throw new Error(result.error || 'Erreur inconnue.');
                     }
 
-                    alert(result.message);
+                    showAlert('SUCCÈS', result.message);
                     await showRegisteredCitizens(); // Refresh the list
 
                 } catch (error) {
-                    alert(`Erreur lors de la suppression : ${error.message}`);
+                    showAlert('ERREUR', `Erreur lors de la suppression : ${error.message}`, true);
                     btn.disabled = false;
                     btn.textContent = 'Supprimer';
                 }
