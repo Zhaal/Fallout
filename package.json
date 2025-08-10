@@ -1,0 +1,20 @@
+{
+  "name": "fallout-character-creator",
+  "version": "1.0.0",
+  "description": "Fallout-themed character creator with online save.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fallout",
+    "character",
+    "netlify"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^20.0.1",
+    "bcryptjs": "^2.4.3"
+  }
+}

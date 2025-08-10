@@ -310,6 +310,25 @@
             box-shadow: 0 0 8px var(--primary-color) inset;
         }
 
+        @keyframes flashing-yellow {
+            0%, 100% {
+                background-color: var(--color-amber-bg);
+                color: var(--color-amber-primary);
+                border-color: var(--color-amber-primary);
+                box-shadow: 0 0 8px var(--color-amber-primary) inset;
+            }
+            50% {
+                background-color: var(--color-amber-primary);
+                color: var(--color-black);
+                border-color: var(--color-amber-primary);
+                box-shadow: 0 0 15px var(--color-amber-primary);
+            }
+        }
+
+        .new-mail-notification {
+            animation: flashing-yellow 1s infinite;
+        }
+
         /* --- CONTENT AREA --- */
         .content-area {
             flex-grow: 1;
@@ -533,11 +552,74 @@
             margin-bottom: 20px;
         }
 
+        .character-identity {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .character-identity input {
+            width: 50%;
+            padding: 8px;
+            background: var(--bg-color);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .character-identity input::placeholder,
+        .character-password input::placeholder {
+            color: var(--dark-color);
+        }
+
+        .character-password {
+            margin-bottom: 20px;
+        }
+
+        .character-password input {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-color);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .special-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
         .special-stats {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-bottom: 20px;
+            flex-basis: 50%;
+        }
+
+        .special-description {
+            flex-basis: 50%;
+            border: 1px solid var(--dark-color);
+            padding: 10px;
+            background: var(--bg-color);
+            text-align: left;
+            height: 290px; /* Fixed height */
+            overflow-y: auto; /* Add scrollbar if content overflows */
+        }
+
+        .special-description h4 {
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .special-description p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
         }
 
         .stat {
@@ -583,7 +665,7 @@
             text-align: center;
         }
 
-        #special-confirm-btn {
+        #special-confirm-btn, #special-cancel-btn {
             font-family: inherit;
             font-size: 1.2rem;
             padding: 10px 20px;
@@ -593,11 +675,81 @@
             cursor: pointer;
             margin-top: 10px;
             text-shadow: none;
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
-        #special-confirm-btn:hover {
+        #special-cancel-btn {
+            background: transparent;
+            color: var(--primary-color);
+        }
+
+        #special-confirm-btn:hover, #special-cancel-btn:hover {
             background: var(--dark-color);
             color: var(--primary-color);
+        }
+
+        /* --- STYLES MODAL CITOYENS --- */
+        #citizens-modal {
+            max-width: 700px;
+        }
+
+        #citizens-list-container {
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--dark-color);
+            padding: 10px;
+            margin-bottom: 20px;
+            background: var(--bg-color);
+        }
+
+        .citizen-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid var(--dark-color);
+        }
+
+        .citizen-entry:last-child {
+            border-bottom: none;
+        }
+
+        .citizen-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .citizen-name {
+            font-size: 1.2rem;
+        }
+
+        .citizen-stats {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 3px var(--primary-color);
+            margin-top: 5px;
+        }
+
+        .delete-citizen-btn {
+            background: #ff0000;
+            color: #fff;
+            border: 1px solid #ff0000;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* --- STYLES MODAL D'ALERTE --- */
+        #alert-modal-title.error-title {
+            color: var(--color-error);
+            text-shadow: 0 0 5px var(--color-error);
+        }
+
+        /* --- STYLES MODAL PROMPT --- */
+        #prompt-form {
+            margin-top: 15px;
         }
 
     </style>
@@ -658,6 +810,8 @@
             <button data-tab="superviseurA" data-password="mutation">Superviseur A</button>
             <button data-tab="contexte" data-password="mutation">Contexte</button>
             <button data-tab="mj" data-password="zhaal">MJ</button>
+            <button id="mail-btn">Mail</button>
+            <button id="registered-citizens-btn">Citoyen enregistré</button>
         </nav>
 
         <!-- ZONE DE CONTENU -->
@@ -704,10 +858,67 @@
         <div id="special-modal">
             <h2>S.P.E.C.I.A.L.</h2>
             <p>Créez votre personnage. Vous avez <span id="points-to-spend">21</span> points à répartir.</p>
-            <div class="special-stats">
-                <!-- Les stats seront générées par JS -->
+
+            <div class="character-identity">
+                <input type="text" id="character-lastname" placeholder="Nom..." autocomplete="off">
+                <input type="text" id="character-firstname" placeholder="Prénoms..." autocomplete="off">
             </div>
+            <div class="character-password">
+                <input type="password" id="character-password" placeholder="Mot de passe..." autocomplete="off">
+            </div>
+
+            <div class="special-container">
+                <div class="special-stats">
+                    <!-- Les stats seront générées par JS -->
+                </div>
+                <div class="special-description" id="special-description-box">
+                    <p>Survolez un attribut pour lire sa description.</p>
+                </div>
+            </div>
+
+            <button id="special-cancel-btn" type="button">Annuler</button>
             <button id="special-confirm-btn">Valider la création</button>
+        </div>
+    </div>
+
+    <!-- MODAL CITOYENS ENREGISTRÉS -->
+    <div class="modal-overlay" id="citizens-modal-overlay">
+        <div id="citizens-modal" class="modal">
+            <h2>Citoyens Enregistrés</h2>
+            <div id="citizens-list-container">
+                <!-- La liste des citoyens sera injectée ici par JS -->
+                <p>Chargement...</p>
+            </div>
+            <button id="close-citizens-modal-btn">Fermer</button>
+        </div>
+    </div>
+
+    <!-- MODAL MAIL -->
+    <div class="modal-overlay" id="mail-modal-overlay">
+        <div id="mail-modal" class="modal">
+            <!-- Contenu dynamique : login ou inbox -->
+        </div>
+    </div>
+
+    <!-- MODAL D'ALERTE GÉNÉRIQUE -->
+    <div class="modal-overlay" id="alert-modal-overlay">
+        <div id="alert-modal" class="modal">
+            <h2 id="alert-modal-title"></h2>
+            <p id="alert-modal-body"></p>
+            <button id="alert-modal-close-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE SAISIE (PROMPT) -->
+    <div class="modal-overlay" id="prompt-modal-overlay">
+        <div id="prompt-modal" class="modal">
+            <h2 id="prompt-modal-title"></h2>
+            <p id="prompt-modal-body"></p>
+            <form id="prompt-form">
+                <input type="password" id="prompt-modal-input" autocomplete="off">
+                <button type="submit" id="prompt-modal-ok-btn">OK</button>
+                <button type="button" id="prompt-modal-cancel-btn">Annuler</button>
+            </form>
         </div>
     </div>
 
@@ -720,6 +931,8 @@
     <audio id="audio-mdp-no" src="mdp-no.wav" preload="auto"></audio>
     <audio id="audio-key" src="clavier.wav" preload="auto"></audio>
     <audio id="audio-button" src="bouton.wav" preload="auto"></audio>
+    <audio id="audio-mail" src="mail.wav" preload="auto"></audio>
+    <audio id="audio-page" src="page.wav" preload="auto"></audio>
 
     <!--
     /**********************************\
@@ -750,8 +963,30 @@
 
             const specialModalOverlay = document.getElementById('special-modal-overlay');
             const specialConfirmBtn = document.getElementById('special-confirm-btn');
+            const specialCancelBtn = document.getElementById('special-cancel-btn');
             const specialStatsContainer = document.querySelector('.special-stats');
             const pointsToSpendEl = document.getElementById('points-to-spend');
+
+            const citizensModalOverlay = document.getElementById('citizens-modal-overlay');
+            const citizensListContainer = document.getElementById('citizens-list-container');
+            const registeredCitizensBtn = document.getElementById('registered-citizens-btn');
+            const closeCitizensModalBtn = document.getElementById('close-citizens-modal-btn');
+
+            const mailBtn = document.getElementById('mail-btn');
+            const mailModalOverlay = document.getElementById('mail-modal-overlay');
+            const mailModal = document.getElementById('mail-modal');
+
+            const alertModalOverlay = document.getElementById('alert-modal-overlay');
+            const alertModalTitle = document.getElementById('alert-modal-title');
+            const alertModalBody = document.getElementById('alert-modal-body');
+            const alertModalCloseBtn = document.getElementById('alert-modal-close-btn');
+
+            const promptModalOverlay = document.getElementById('prompt-modal-overlay');
+            const promptModalTitle = document.getElementById('prompt-modal-title');
+            const promptModalBody = document.getElementById('prompt-modal-body');
+            const promptForm = document.getElementById('prompt-form');
+            const promptModalInput = document.getElementById('prompt-modal-input');
+            const promptModalCancelBtn = document.getElementById('prompt-modal-cancel-btn');
 
 
             // --- FONCTION SON ---
@@ -1116,10 +1351,27 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                                         biometricButton.textContent = 'Enregistrement Biométrique';
                                         biometricButton.className = 'biometric-button';
 
-                                        biometricButton.addEventListener('click', () => {
+                                        biometricButton.addEventListener('click', async () => {
                                             playSound('audio-button');
-                                            initializeSpecialModal();
-                                            specialModalOverlay.classList.add('visible');
+
+                                            // Check character limit
+                                            try {
+                                                const response = await fetch('/.netlify/functions/get-characters');
+                                                const characters = await response.json();
+
+                                                if (response.ok && characters.length >= 7) {
+                                                    showAlert(
+                                                        "ACCÈS REFUSÉ",
+                                                        "Le nombre maximum de 7 habitants pour cette expérience a été atteint. Aucun enregistrement supplémentaire n'est autorisé.",
+                                                        true // isError = true
+                                                    );
+                                                } else {
+                                                    initializeSpecialModal();
+                                                    specialModalOverlay.classList.add('visible');
+                                                }
+                                            } catch (error) {
+                                                showAlert("ERREUR SYSTÈME", `Impossible de vérifier la liste des citoyens. Erreur: ${error.message}`, true);
+                                            }
                                         });
 
                                         textContentElement.appendChild(biometricButton);
@@ -1142,10 +1394,10 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             // Gérer le clic sur un onglet
             function handleNavClick(e) {
                 const button = e.target.closest('button');
-                if (!button || button.classList.contains('active')) return;
+                if (!button || !button.dataset.tab || button.classList.contains('active')) return;
 
                 triggerGlitchEffect(mainInterface);
-                playSound('audio-button');
+                playSound('audio-page');
 
                 const tabId = button.dataset.tab;
                 const requiredPassword = button.dataset.password;
@@ -1201,20 +1453,72 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             }
 
             // --- LOGIQUE S.P.E.C.I.A.L. ---
+            const specialDescriptionBox = document.getElementById('special-description-box');
+            const characterLastnameInput = document.getElementById('character-lastname');
+            const characterFirstnameInput = document.getElementById('character-firstname');
             let pointsToSpend = 21;
+
             const stats = {
-                S: { name: 'Strength', value: 1 },
+                S: { name: 'Force', value: 1 },
                 P: { name: 'Perception', value: 1 },
                 E: { name: 'Endurance', value: 1 },
-                C: { name: 'Charisma', value: 1 },
+                C: { name: 'Charisme', value: 1 },
                 I: { name: 'Intelligence', value: 1 },
-                A: { name: 'Agility', value: 1 },
-                L: { name: 'Luck', value: 1 }
+                A: { name: 'Agilité', value: 1 },
+                L: { name: 'Chance', value: 1 }
+            };
+
+            const specialDescriptions = {
+                S: {
+                    title: 'S — Strength (Force)',
+                    description: 'Puissance physique et musculature.',
+                    effects: 'Augmente les dégâts au corps à corps et à l’arme blanche. Permet de porter plus d’objets (capacité de charge). Certaines armes lourdes exigent un certain niveau de Force.',
+                    example: 'Exemple : Un personnage avec 10 en Force peut trimballer un mini-gun et un frigo sans broncher… ou presque.'
+                },
+                P: {
+                    title: 'P — Perception',
+                    description: 'Sens de l’observation, vigilance, précision sensorielle.',
+                    effects: 'Améliore la précision en V.A.T.S. Détecte plus facilement pièges, ennemis cachés, et emplacements d’objets. Certaines quêtes ou dialogues dépendent de ton acuité.',
+                    example: 'Exemple : Repérer un ennemi bien avant qu’il te voie, ou trouver un passage secret.'
+                },
+                E: {
+                    title: 'E — Endurance',
+                    description: 'Résistance physique, santé générale.',
+                    effects: 'Augmente les Points de Vie (HP). Réduit les dégâts des radiations et des poisons. Permet de courir plus longtemps ou d’encaisser plus de coups.',
+                    example: 'Exemple : Survivre à une promenade dans une zone ultra-irradiée.'
+                },
+                C: {
+                    title: 'C — Charisma (Charisme)',
+                    description: 'Présence, force de persuasion, capacité à inspirer.',
+                    effects: 'Ouvre des options de dialogue spéciales. Améliore le commerce (meilleurs prix). Dans certains Fallout (comme FO4), booste la gestion des colonies.',
+                    example: 'Exemple : Convaincre un pillard armé jusqu’aux dents de te donner sa chemise… et un Stimpak.'
+                },
+                I: {
+                    title: 'I — Intelligence',
+                    description: 'Capacité de raisonnement, connaissance technique.',
+                    effects: 'Plus de points de compétence par niveau (dans les jeux classiques). Débloque des options techniques dans les dialogues et interactions (hack, réparation). Influence la vitesse de progression dans certaines aptitudes.',
+                    example: 'Exemple : Pirater un terminal de sécurité haut niveau sans te prendre un verrouillage permanent.'
+                },
+                A: {
+                    title: 'A — Agility (Agilité)',
+                    description: 'Coordination, vitesse, souplesse.',
+                    effects: 'Plus de Points d’Action en V.A.T.S. Augmente la discrétion et la précision en combat. Permet de recharger plus vite ou de mieux viser en mouvement.',
+                    example: 'Exemple : Te faufiler dans un camp ennemi sans qu’aucune alarme ne sonne.'
+                },
+                L: {
+                    title: 'L — Luck (Chance)',
+                    description: 'Ton petit coup de pouce du destin.',
+                    effects: 'Augmente la fréquence des coups critiques. Influence les butins trouvés. Certains effets aléatoires deviennent beaucoup plus favorables.',
+                    example: 'Exemple : Trouver un Fat Man avec 5 mini-bombes sur le premier ennemi croisé.'
+                }
             };
 
             function initializeSpecialModal() {
                 pointsToSpend = 21;
                 Object.keys(stats).forEach(key => stats[key].value = 1);
+                characterLastnameInput.value = '';
+                characterFirstnameInput.value = '';
+                specialDescriptionBox.innerHTML = '<p>Survolez un attribut pour lire sa description.</p>';
                 renderSpecialStats();
             }
 
@@ -1225,6 +1529,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 for (const [key, stat] of Object.entries(stats)) {
                     const statEl = document.createElement('div');
                     statEl.className = 'stat';
+                    statEl.dataset.statKey = key; // Ajout d'une data-attribute pour l'identification
                     statEl.innerHTML = `
                         <span class="stat-name">${key} (${stat.name})</span>
                         <div class="stat-controls">
@@ -1255,16 +1560,255 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 renderSpecialStats();
             });
 
+            specialStatsContainer.addEventListener('mouseover', e => {
+                const statEl = e.target.closest('.stat');
+                if (!statEl) return;
+
+                const statKey = statEl.dataset.statKey;
+                const info = specialDescriptions[statKey];
+
+                if (info) {
+                    specialDescriptionBox.innerHTML = `
+                        <h4>${info.title}</h4>
+                        <p><strong>Description :</strong> ${info.description}</p>
+                        <p><strong>Effets principaux :</strong> ${info.effects}</p>
+                        <p><em>${info.example}</em></p>
+                    `;
+                }
+            });
+
+            specialStatsContainer.addEventListener('mouseout', () => {
+                // Optionnel : remettre le texte par défaut quand on quitte la zone des stats
+                // specialDescriptionBox.innerHTML = '<p>Survolez un attribut pour lire sa description.</p>';
+            });
+
+            async function saveCharacterOnline(characterData) {
+                const btn = document.getElementById('special-confirm-btn');
+                btn.disabled = true;
+                btn.textContent = 'Sauvegarde en cours...';
+
+                try {
+                    const response = await fetch('/.netlify/functions/save-character', {
+                        method: 'POST',
+                        body: JSON.stringify(characterData),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        // Try to parse error response as JSON, but fall back to text
+                        let errorMessage;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.error || `Erreur du serveur: ${response.status}`;
+                        } else {
+                            errorMessage = await response.text();
+                        }
+                        throw new Error(errorMessage);
+                    }
+
+                    const result = await response.json();
+                    showAlert('SUCCÈS', result.message);
+
+                    specialModalOverlay.classList.remove('visible');
+                    playSound('audio-mdp-ok');
+
+                    // Trigger mail notification
+                    const mailBtn = document.getElementById('mail-btn');
+                    mailBtn.classList.add('new-mail-notification');
+                    setTimeout(() => {
+                        mailBtn.classList.remove('new-mail-notification');
+                    }, 10000); // Notification lasts for 10 seconds
+
+                } catch (error) {
+                    console.error('Erreur lors de la sauvegarde:', error);
+                    showAlert('ERREUR', `Échec de la sauvegarde en ligne. Erreur: ${error.message}\n\nLes données seront téléchargées localement comme solution de secours.`, true);
+                    // Fallback to local download
+                    saveCharacterToFile(characterData);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Valider la création';
+                }
+            }
+
+            function saveCharacterToFile(characterData) {
+                const dataStr = JSON.stringify(characterData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: "application/json"});
+                const url = URL.createObjectURL(dataBlob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${characterData.nom.replace(/\s+/g, '_')}_character.json`;
+                document.body.appendChild(a);
+                a.click();
+
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            }
+
             specialConfirmBtn.addEventListener('click', () => {
-                if (pointsToSpend > 0) {
-                    alert('Vous devez dépenser tous vos points !');
+                const lastname = characterLastnameInput.value.trim();
+                const firstname = characterFirstnameInput.value.trim();
+                const password = document.getElementById('character-password').value;
+
+                if (!lastname || !firstname) {
+                    showAlert('ERREUR DE SAISIE', 'Veuillez renseigner le nom et les prénoms.', true);
                     return;
                 }
-                // Ici, vous pouvez sauvegarder les stats du personnage
-                console.log('Personnage créé :', stats);
-                specialModalOverlay.classList.remove('visible');
-                playSound('audio-mdp-ok');
+
+                if (!password) {
+                    showAlert('ERREUR DE SAISIE', 'Le mot de passe est obligatoire.', true);
+                    return;
+                }
+
+                if (pointsToSpend > 0) {
+                    showAlert('ATTENTION', 'Vous devez dépenser tous vos points S.P.E.C.I.A.L. !', true);
+                    return;
+                }
+
+                const characterData = {
+                    nom: lastname,
+                    prenoms: firstname,
+                    password: password, // This will be hashed server-side
+                    special: stats
+                };
+
+                // Call the new online save function
+                saveCharacterOnline(characterData);
             });
+
+            specialCancelBtn.addEventListener('click', () => {
+                playSound('audio-button');
+                specialModalOverlay.classList.remove('visible');
+            });
+
+
+            // --- ALERTE MODALE PERSONNALISÉE ---
+            function showAlert(title, message, isError = false) {
+                alertModalTitle.textContent = title;
+                alertModalBody.textContent = message;
+                alertModalTitle.classList.toggle('error-title', isError);
+                alertModalOverlay.classList.add('visible');
+                playSound(isError ? 'audio-mdp-no' : 'audio-protected');
+            }
+
+            function showPrompt(title, body) {
+                return new Promise((resolve) => {
+                    promptModalTitle.textContent = title;
+                    promptModalBody.textContent = body;
+                    promptModalInput.value = '';
+                    promptModalOverlay.classList.add('visible');
+                    promptModalInput.focus();
+
+                    const handleConfirm = (e) => {
+                        e.preventDefault();
+                        cleanup();
+                        resolve(promptModalInput.value);
+                    };
+
+                    const handleCancel = () => {
+                        cleanup();
+                        resolve(null);
+                    };
+
+                    const cleanup = () => {
+                        promptModalOverlay.classList.remove('visible');
+                        promptForm.removeEventListener('submit', handleConfirm);
+                        promptModalCancelBtn.removeEventListener('click', handleCancel);
+                    };
+
+                    promptForm.addEventListener('submit', handleConfirm);
+                    promptModalCancelBtn.addEventListener('click', handleCancel);
+                });
+            }
+
+
+            // --- LOGIQUE MESSAGERIE ---
+
+            let loggedInCharacter = null;
+
+            function showMailLogin() {
+                loggedInCharacter = null;
+                mailModal.innerHTML = `
+                    <h2>Messagerie Privée</h2>
+                    <form id="mail-login-form">
+                        <input type="text" id="mail-login-name" placeholder="Nom du personnage..." required>
+                        <input type="password" id="mail-login-password" placeholder="Mot de passe..." required>
+                        <button type="submit">Connexion</button>
+                        <button type="button" id="close-mail-modal-btn">Fermer</button>
+                    </form>
+                `;
+            }
+
+            function showInbox(character) {
+                loggedInCharacter = character;
+                let emailsHTML = '<p>Boîte de réception vide.</p>';
+                if (character.emails && character.emails.length > 0) {
+                    emailsHTML = character.emails.map(email => `
+                        <div class="email-item">
+                            <h4>De : ${email.from}</h4>
+                            <p>${email.body}</p>
+                        </div>
+                    `).join('');
+                }
+
+                mailModal.innerHTML = `
+                    <h2>Boîte de réception de ${character.prenoms} ${character.nom}</h2>
+                    <div class="inbox-container">${emailsHTML}</div>
+                    <button type="button" id="close-mail-modal-btn">Fermer</button>
+                `;
+            }
+
+
+            // --- LOGIQUE CITOYENS ENREGISTRÉS ---
+
+            function renderCitizensList(citizens) {
+                citizensListContainer.innerHTML = ''; // Clear previous content
+                if (citizens.length === 0) {
+                    citizensListContainer.innerHTML = '<p>Aucun citoyen enregistré pour le moment.</p>';
+                    return;
+                }
+
+                citizens.forEach(citizen => {
+                    // Get all stats
+                    const stats = Object.entries(citizen.special)
+                        .map(([key, stat]) => `${key}:${stat.value}`)
+                        .join(' | ');
+
+                    const entry = document.createElement('div');
+                    entry.className = 'citizen-entry';
+                    entry.innerHTML = `
+                        <div class="citizen-info">
+                            <span class="citizen-name">${citizen.prenoms} ${citizen.nom}</span>
+                            <span class="citizen-stats">Top Stats: ${stats}</span>
+                        </div>
+                        <button class="delete-citizen-btn" data-id="${citizen.id}">Supprimer</button>
+                    `;
+                    citizensListContainer.appendChild(entry);
+                });
+            }
+
+            async function showRegisteredCitizens() {
+                playSound('audio-button');
+                citizensModalOverlay.classList.add('visible');
+                citizensListContainer.innerHTML = '<p>Chargement...</p>';
+
+                try {
+                    const response = await fetch('/.netlify/functions/get-characters');
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Erreur serveur');
+                    }
+                    const citizens = await response.json();
+                    renderCitizensList(citizens);
+                } catch (error) {
+                    citizensListContainer.innerHTML = `<p style="color: var(--color-error);">Erreur: ${error.message}</p>`;
+                }
+            }
 
 
             // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
@@ -1303,6 +1847,17 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             // Navigation
             navBar.addEventListener('click', handleNavClick);
             
+            registeredCitizensBtn.addEventListener('click', () => {
+                playSound('audio-page');
+                showRegisteredCitizens();
+            });
+
+            mailBtn.addEventListener('click', () => {
+                playSound('audio-mail');
+                mailModalOverlay.classList.add('visible');
+                showMailLogin();
+            });
+
             // Modal
             passwordForm.addEventListener('submit', handlePasswordSubmit);
             cancelBtn.addEventListener('click', () => {
@@ -1313,6 +1868,103 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 if (e.target === modalOverlay) {
                     modalOverlay.classList.remove('visible');
                     targetTabAfterPassword = null;
+                }
+            });
+            closeCitizensModalBtn.addEventListener('click', () => {
+                playSound('audio-button');
+                citizensModalOverlay.classList.remove('visible');
+            });
+
+            alertModalCloseBtn.addEventListener('click', () => {
+                alertModalOverlay.classList.remove('visible');
+            });
+
+            mailModalOverlay.addEventListener('click', (e) => {
+                if (e.target === mailModalOverlay) {
+                    mailModalOverlay.classList.remove('visible');
+                }
+            });
+
+            mailModal.addEventListener('click', async (e) => {
+                // Use delegation for buttons inside the dynamic content
+                if (e.target.id === 'close-mail-modal-btn') {
+                    playSound('audio-button');
+                    mailModalOverlay.classList.remove('visible');
+                }
+            });
+
+            mailModal.addEventListener('submit', async (e) => {
+                if (e.target.id !== 'mail-login-form') return;
+                e.preventDefault();
+
+                const form = e.target;
+                const nameInput = form.querySelector('#mail-login-name');
+                const passwordInput = form.querySelector('#mail-login-password');
+                const submitBtn = form.querySelector('button[type="submit"]');
+
+                const nom = nameInput.value;
+                const password = passwordInput.value;
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '...';
+
+                try {
+                    const response = await fetch('/.netlify/functions/login-character', {
+                        method: 'POST',
+                        body: JSON.stringify({ nom, password }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Erreur inconnue.');
+                    }
+
+                    showInbox(result); // Show the inbox with the returned character data
+
+                } catch (error) {
+                    showAlert('ERREUR DE CONNEXION', error.message, true);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Connexion';
+                }
+            });
+
+            citizensListContainer.addEventListener('click', async (e) => {
+                if (!e.target.classList.contains('delete-citizen-btn')) return;
+
+                playSound('audio-button');
+                const btn = e.target;
+                const characterId = btn.dataset.id;
+                const password = await showPrompt('CONFIRMATION REQUISE', 'Veuillez entrer le mot de passe pour supprimer ce personnage :');
+
+                if (password === null) return; // User cancelled the prompt
+                if (!password) {
+                    showAlert('ERREUR', 'Le mot de passe est requis pour la suppression.', true);
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = '...';
+
+                try {
+                    const response = await fetch('/.netlify/functions/delete-character', {
+                        method: 'POST',
+                        body: JSON.stringify({ id: characterId, password: password }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Erreur inconnue.');
+                    }
+
+                    showAlert('SUCCÈS', result.message);
+                    await showRegisteredCitizens(); // Refresh the list
+
+                } catch (error) {
+                    showAlert('ERREUR', `Erreur lors de la suppression : ${error.message}`, true);
+                    btn.disabled = false;
+                    btn.textContent = 'Supprimer';
                 }
             });
 
