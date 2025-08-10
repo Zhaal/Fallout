@@ -40,5 +40,47 @@
         "body": "Félicitations, sfgs dg !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
+  },
+  {
+    "id": "dfg-1754859053921",
+    "nom": "dfg",
+    "prenoms": "dfgdfg",
+    "hashedPassword": "$2a$10$YpRNPtJwUJyiu80IHWU06uEsb0iGuqnn/TWLmyAeaCjyxl7uZYDCO",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 10
+      },
+      "P": {
+        "name": "Perception",
+        "value": 10
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 4
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 1
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 1
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 1
+      },
+      "L": {
+        "name": "Chance",
+        "value": 1
+      }
+    },
+    "emails": [
+      {
+        "from": "Vault-Tec Corporation",
+        "body": "Félicitations, dfgdfg dfg !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
+      }
+    ]
   }
 ]
