@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "nom": "qS",
+    "prenoms": "qs",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 7
+      },
+      "P": {
+        "name": "Perception",
+        "value": 8
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 7
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 3
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 1
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 1
+      },
+      "L": {
+        "name": "Chance",
+        "value": 1
+      }
+    }
+  }
+]
