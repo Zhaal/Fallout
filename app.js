@@ -133,30 +133,33 @@ function setupTabs(){
 }
 
 function typeInEffect(){
-  const pane = qs('.pane.is-visible pre');
-  if(!pane) return;
-  const mode = pane.dataset.mode || 'lines';
-  const src = pane.textContent;
-  pane.textContent = '';
-  let parts;
-  if(mode === 'sentences'){
-    parts = src.match(/[^.!?\n]+[.!?\n]*/g) || [];
-  }else{
-    parts = src.split('\n');
-  }
-  let i = 0;
-  pane.style.setProperty('--pip-cursor', '" "');
-  const step = () => {
-    pane.textContent += parts[i];
-    if(mode !== 'sentences' && i < parts.length - 1) pane.textContent += '\n';
-    i++;
-    if(i < parts.length){
-      setTimeout(step, 150);
+  const pres = qsa('.pane.is-visible pre');
+  if(!pres.length) return;
+  pres.forEach(pane=>{
+    const src = pane.dataset.src || pane.textContent;
+    pane.dataset.src = src;
+    const mode = pane.dataset.mode || 'lines';
+    pane.textContent = '';
+    let parts;
+    if(mode === 'sentences'){
+      parts = src.match(/[^.!?\n]+[.!?\n]*/g) || [];
     }else{
-      pane.style.setProperty('--pip-cursor', '"▮"');
+      parts = src.split('\n');
     }
-  };
-  step();
+    let i = 0;
+    pane.style.setProperty('--pip-cursor', '" "');
+    const step = () => {
+      pane.textContent += parts[i];
+      if(mode !== 'sentences' && i < parts.length - 1) pane.textContent += '\n';
+      i++;
+      if(i < parts.length){
+        setTimeout(step, 150);
+      }else{
+        pane.style.setProperty('--pip-cursor', '"▮"');
+      }
+    };
+    step();
+  });
 }
 
 function keyboardShortcuts(){
