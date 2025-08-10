@@ -499,7 +499,16 @@
         </div>
     </div>
 
-    <!-- 
+    <!-- EFFETS SONORES -->
+    <audio id="audio-connect" src="Connect-pipboy.wav" preload="auto"></audio>
+    <audio id="audio-protected" src="accès-protégé.wav" preload="auto"></audio>
+    <audio id="audio-amber-on" src="ambre-on.wav" preload="auto"></audio>
+    <audio id="audio-amber-off" src="ambre-off.wav" preload="auto"></audio>
+    <audio id="audio-mdp-ok" src="mdp-ok.wav" preload="auto"></audio>
+    <audio id="audio-mdp-no" src="mdp-no.wav" preload="auto"></audio>
+    <audio id="audio-key" src="clavier.wav" preload="auto"></audio>
+
+    <!--
     /**********************************\
     * APP.JS START            *
     \**********************************/
@@ -522,6 +531,16 @@
             const passwordForm = document.getElementById('password-form');
             const passwordInput = document.getElementById('password-input');
             const cancelBtn = document.getElementById('cancel-button');
+
+            // --- FONCTION SON ---
+            function playSound(id) {
+                const audio = document.getElementById(id);
+                if (audio) {
+                    const clone = audio.cloneNode();
+                    clone.play();
+                }
+            }
+            document.addEventListener('keydown', () => playSound('audio-key'));
 
             // --- CONTENU TEXTUEL DES ONGLETS ---
             const contentData = {
@@ -625,6 +644,7 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                             textContentElement.textContent += text.charAt(i);
                             i++;
                         }
+                        playSound('audio-key');
                         textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
                     } else {
                         clearInterval(typingInterval);
@@ -658,6 +678,7 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                     modal.classList.remove('shake');
                     modalOverlay.classList.add('visible');
                     passwordInput.focus();
+                    playSound('audio-protected');
                 } else {
                     displayTabContent(tabId);
                 }
@@ -673,12 +694,14 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                     modalOverlay.classList.remove('visible');
                     displayTabContent(targetTabAfterPassword);
                     targetTabAfterPassword = null;
+                    playSound('audio-mdp-ok');
                 } else {
                     passwordInput.classList.add('error');
                     modal.classList.add('shake');
                     setTimeout(() => {
                         modal.classList.remove('shake');
                     }, 500);
+                    playSound('audio-mdp-no');
                 }
             }
 
@@ -686,6 +709,7 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
             
             // Connexion initiale
             connectButton.addEventListener('click', () => {
+                playSound('audio-connect');
                 bootOverlay.classList.add('hidden');
                 mainInterface.classList.add('visible');
                 // Lancer le contenu du premier onglet après la transition
@@ -695,6 +719,7 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
             // Changement de thème
             themeSwitcher.addEventListener('click', () => {
                 document.body.classList.toggle('theme-amber');
+                playSound(document.body.classList.contains('theme-amber') ? 'audio-amber-on' : 'audio-amber-off');
             });
             
             // Navigation
