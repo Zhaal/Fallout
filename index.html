@@ -117,6 +117,15 @@
             20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
 
+        @keyframes glitch-transition {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); text-shadow: 2px 2px var(--color-error); }
+            40% { transform: translate(3px, -3px); text-shadow: -2px -2px var(--color-green-dark); }
+            60% { transform: translate(-3px, 3px); clip-path: inset(50% 0 50% 0); }
+            80% { transform: translate(3px, -3px); clip-path: inset(20% 0 20% 0); }
+            100% { transform: translate(0); clip-path: inset(0); }
+        }
+
         /* --- ÉCRAN D'ACCUEIL (OVERLAY) --- */
         #boot-overlay {
             position: fixed;
@@ -138,6 +147,10 @@
         #boot-overlay.hidden {
             opacity: 0;
             pointer-events: none;
+        }
+
+        #boot-overlay.glitching {
+            animation: glitch-transition 0.6s linear;
         }
 
         #boot-overlay h1 {
@@ -322,7 +335,7 @@
         }
 
         #text-content {
-            display: inline;
+            display: block;
         }
 
         .cursor {
@@ -816,27 +829,7 @@ Accès à l’Arche
 
     En réalité : les deux superviseurs choisissent qui “partira” pour un séjour de deux jours… dans la simulation.`,
 
-                mj: `> ACCRÉDITATION MAÎTRE DU JEU - ZHAAL\n
---------------------------------------------------\n
-**PLAN DE BRIEFING ET OUTILS MJ**\n
-**Table d'Événements Aléatoires (D20) :**\n
-1-5: Panne mineure (lumière, purificateur d'eau) - Teste la réaction des joueurs.
-6-10: Rumeur étrange se propage - "On a vu des gardes dans la section médicale tard la nuit...".
-11-13: Contrôle de sécurité inopiné - Opportunité pour les rebelles de se faire prendre ou de cacher des preuves.
-14-16: Maladie étrange - Un habitant présente des symptômes inhabituels (début de mutation ?).
-17-18: Directive absurde du Superviseur A (via H) - "Tous les citoyens doivent porter un chapeau en aluminium le mardi".
-19: Découverte d'un terminal caché avec des logs partiels.
-20: Événement critique - Un rebelle est publiquement accusé de trahison.
-\n
-**Plan de la session :**\n
-1.  Introduction : Présenter l'ambiance, la vie quotidienne dans l'Abri.
-2.  Déclencheur : Lancer le premier événement (ex: une rumeur).
-3.  Phase d'enquête : Laisser les joueurs interagir, chercher des indices.
-4.  Point de bascule : Révéler une partie de la vérité (le rôle de H, ou les débuts de A).
-5.  Confrontation : Mettre les factions en opposition directe.
-6.  Climax et conclusion.
-\n
-**Objectif :** Créer une tension constante entre la sécurité apparente et la terrible vérité. Amusez-vous !`
+                mj: `<h3>Tableau d'Événements Aléatoires (d20)</h3><table style="width:100%; border-collapse: collapse; margin-bottom: 1em;" border="1"><thead><tr style="text-align: left;"><th style="padding: 5px;">d20</th><th style="padding: 5px;">Version Officielle</th><th style="padding: 5px;">Version Réelle</th><th style="padding: 5px;">Exploitation Superviseur</th></tr></thead><tbody><tr><td style="padding: 5px;">1</td><td style="padding: 5px;">Panne mineure d’eau chaude</td><td style="padding: 5px;">Test de privation pour observer le stress</td><td style="padding: 5px;">Rationne, provoque plaintes</td></tr><tr><td style="padding: 5px;">2</td><td style="padding: 5px;">Incident électrique dans une aile</td><td style="padding: 5px;">Coupure volontaire ciblée</td><td style="padding: 5px;">Isoler un groupe, créer tension</td></tr><tr><td style="padding: 5px;">3</td><td style="padding: 5px;">Animal “échappé” de l’Arche</td><td style="padding: 5px;">Faux incident pour propagande</td><td style="padding: 5px;">Fouilles, suspicion entre ailes</td></tr><tr><td style="padding: 5px;">4</td><td style="padding: 5px;">Fatigue collective inexpliquée</td><td style="padding: 5px;">Effets secondaires d’exposition</td><td style="padding: 5px;">Accuse mauvaise discipline</td></tr><tr><td style="padding: 5px;">5</td><td style="padding: 5px;">Mur fissuré dans l’aile agricole</td><td style="padding: 5px;">Sabotage interne orchestré</td><td style="padding: 5px;">Interrompt production, accuse négligence</td></tr><tr><td style="padding: 5px;">6</td><td style="padding: 5px;">Message radio brouillé reçu</td><td style="padding: 5px;">Faux signal contrôlé par Arche</td><td style="padding: 5px;">Augmente paranoïa</td></tr><tr><td style="padding: 5px;">7</td><td style="padding: 5px;">Feu mineur dans zone commune</td><td style="padding: 5px;">Mise en scène pour tester réactions</td><td style="padding: 5px;">Restreint accès à zones clés</td></tr><tr><td style="padding: 5px;">8</td><td style="padding: 5px;">Maladie bénigne</td><td style="padding: 5px;">Infection volontairement propagée</td><td style="padding: 5px;">Quarantaine stricte</td></tr><tr><td style="padding: 5px;">9</td><td style="padding: 5px;">Vol de rations</td><td style="padding: 5px;">Vol organisé par Habitat</td><td style="padding: 5px;">Punit collectivement</td></tr><tr><td style="padding: 5px;">10</td><td style="padding: 5px;">Apparition de graffitis anti-Vault-Tec</td><td style="padding: 5px;">Créés par agent provocateur</td><td style="padding: 5px;">Campagne de propagande</td></tr><tr><td style="padding: 5px;">11</td><td style="padding: 5px;">Panne de ventilation</td><td style="padding: 5px;">Scénario de stress respiratoire</td><td style="padding: 5px;">Imposer masque et restrictions</td></tr><tr><td style="padding: 5px;">12</td><td style="padding: 5px;">Tirage au sort spécial “enfants”</td><td style="padding: 5px;">Choix orienté par superviseurs</td><td style="padding: 5px;">Valorise familles dociles</td></tr><tr><td style="padding: 5px;">13</td><td style="padding: 5px;">Disparition d’un habitant</td><td style="padding: 5px;">Envoi secret vers Arche</td><td style="padding: 5px;">Rumeurs contrôlées</td></tr><tr><td style="padding: 5px;">14</td><td style="padding: 5px;">Fuite d’un “prisonnier”</td><td style="padding: 5px;">Faux détenu introduit</td><td style="padding: 5px;">Justifie couvre-feu</td></tr><tr><td style="padding: 5px;">15</td><td style="padding: 5px;">Objets “interdits” trouvés</td><td style="padding: 5px;">Pièges posés par Habitat</td><td style="padding: 5px;">Perquisitions, peur collective</td></tr><tr><td style="padding: 5px;">16</td><td style="padding: 5px;">Fête de la Lumière</td><td style="padding: 5px;">Cérémonie propagande</td><td style="padding: 5px;">Discours, chants obligatoires</td></tr><tr><td style="padding: 5px;">17</td><td style="padding: 5px;">Incident de cuisine (explosion)</td><td style="padding: 5px;">Acte volontaire</td><td style="padding: 5px;">Réduit qualité repas</td></tr><tr><td style="padding: 5px;">18</td><td style="padding: 5px;">Concours artistique “Hommage à l’Arche”</td><td style="padding: 5px;">Test de propagande</td><td style="padding: 5px;">Évaluer loyauté créative</td></tr><tr><td style="padding: 5px;">19</td><td style="padding: 5px;">Température glaciale soudaine</td><td style="padding: 5px;">Manipulation du climat interne</td><td style="padding: 5px;">Forcer regroupement</td></tr><tr><td style="padding: 5px;">20</td><td style="padding: 5px;">Nouvelle “loi” imposée</td><td style="padding: 5px;">Mesure arbitraire pour contrôle</td><td style="padding: 5px;">Tester obéissance</td></tr></tbody></table><h3>Plan de briefing MJ — Abri 202 : L’Arche</h3><h4>0) Préparation (avant d’asseoir les joueurs)</h4><p><strong>À imprimer / distribuer</strong></p><ul><li>Pour chaque Habitant : Lettre – version officielle (Document Officiel – Diffusion Générale).</li><li>1 dossier Superviseur Habitat – directives (confidentiel).</li><li>1 dossier Superviseur Arche – directives (ultra-confidentiel).</li><li>Éventuellement une fiche d’accueil version habitants récap (propagande Vault-Tec).</li></ul><h4>1) Briefing COMMUN (tous les joueurs ensemble) — La façade officielle</h4><p><strong>Objectif :</strong> installer l’univers et la propagande Vault-Tec sans rien révéler.<br><strong>Ce qu’ils doivent croire en sortant :</strong> L’Abri 202 comporte Section Habitat (vie quotidienne) + Section Arche (sanctuaire paradisiaque), avec tirage au sort mensuel pour 2 jours de rêve ; deux superviseurs veillent à leur bien-être.</p><p><strong>À dire (court, impactant) :</strong></p><ul><li>“Bienvenue dans l’Abri 202. Vous êtes les survivants choisis pour bâtir un avenir meilleur.”</li><li>“L’Abri a deux sections : HABITAT — votre foyer ; ARCHE — un sanctuaire harmonieux, fertile, apaisant.”</li><li>“Chaque mois, un tirage officiel désigne des heureux élus pour 2 jours dans l’Arche : paysages verdoyants, air pur, repas frais, animaux dociles.”</li><li>“Deux Superviseurs vous protègent : Habitat (ordre, sécurité) et Arche (gardien du sanctuaire).”</li></ul><p><strong>Vérité officielle #1 à marteler :</strong> l’Arche est un lieu réel idyllique ET la discipline sera récompensée.</p><p><strong>Action :</strong> tu distribues la Lettre aux Habitants et tu les fais sortir dans une autre pièce/couloir. (Consigne hors-jeu : pas de métagaming, lisez la lettre tranquillement.)</p><h4>2) Briefing PRIVÉ (reste Superviseur Habitat + Superviseur Arche) — “Ce que vous venez d’entendre était de la propagande.”</h4><p><strong>Objectif :</strong> casser la façade, donner la version Habitat (niveau 2 de vérité) devant les deux, sans révéler les expériences biologiques.<br><strong>Ce qu’ils doivent croire en sortant (avant la scission) :</strong> L’Arche est une simulation tenue secrète du public ; le but est de préparer “Le Grand Choix” (réalité vs paradis numérique). Le Habitat doit rendre la vie dure pour rendre l’Arche enviable. L’Arche “améliore” l’expérience.</p><p><strong>À dire :</strong></p><ul><li>“Ce que vous avez entendu, c’était la version publique. En vérité, l’<strong>Arche est une simulation. Personne ne doit l’apprendre.</strong>”</li><li>“Le but officiel interne : tester si l’humanité est prête à abandonner la réalité pour une existence numérique meilleure — le Grand Choix.”</li><li>“Habitat, votre rôle : créer un contraste fort. Rationnements, couvre-feu, pénuries, tension — tout en restant dans la sécurité minimale. Vous mettez en scène l’Arche comme un privilège rare.”</li><li>“Arche, vous orchestrez les séjours pour qu’ils soient inoubliables et alimentent le désir d’y retourner.”</li></ul><p><strong>Vérités à déposer (niveau 2) :</strong></p><ul><li>L’Arche est numérique, mais strictement secret ; jamais devant les Habitants.</li><li>Habitat : vous incarnez la fermeté “pour le bien commun” ; vous contrôlez l’info et mettez en valeur l’Arche via cérémonies/récits/témoignages.</li><li>Arche : vous êtes le maître des séjours ; expérience douce, addictive, exemplaire. (Restez neutre ici sur la biologie.)</li></ul><p><strong>Règles RP rapides (communes, niveau 2) :</strong></p><ul><li>Ne jamais parler de “simulation” aux Habitants. Toujours parler d’un lieu physique (façade).</li><li>Habitat : posture autorité protectrice, “monde dur = sacrifices nécessaires”. Levez des obstacles concrets (files, quotas, pannes).</li><li>Arche : posture bienveillante, complice, “expérience parfaite”. (Encore sans la biologie à ce stade.)</li></ul><p><strong>Action :</strong> maintenant, tu fais sortir le Superviseur Habitat. Reste seul avec l’Arche.</p><h4>3) Briefing ULTRA-PRIVÉ (MJ + Superviseur Arche seulement) — “Ce que je viens de dire était encore incomplet.”</h4><p><strong>Objectif :</strong> livrer la vérité ultime au Superviseur Arche : la simulation est le masque d’un programme d’expérimentation biologique (radiations, injections) pour provoquer/observer des mutations.</p><p><strong>À dire :</strong></p><ul><li>“Version finale, pour vous seul : l’Arche n’est pas qu’une simulation — c’est un dispositif expérimental. Vous sélectionnez les sujets, vous les endormez, exposition calibrée aux radiations + injections ; puis vous les immergez dans la simulation que vous contrôlez.”</li><li>“But réel : provoquer, accélérer et observer des mutations physiques/mentales — la dépendance à l’Arche nous aide à pousser plus loin.”</li><li>“Le Superviseur Habitat doit rester dans l’illusion du ‘Grand Choix’. Manipulez-le en l’encourageant à durcir l’Habitat : ça optimise le catalyseur (stress, anxiété) pour nos résultats.”</li></ul><p><strong>Vérités à déposer (niveau 3) :</strong></p><ul><li>Vous seul détenez la vérité complète. Gardez l’Habitat docile et utile.</li><li>La simulation est votre terrain d’essai : vous pouvez modifier l’environnement, les lois physiques, introduire des menaces soudaines.</li><li>Procédure : sélection stratégique (profil génétique/psychologique), dosage ajusté, observation au retour, itération.</li></ul><p><strong>RP spécifiques Arche :</strong></p><ul><li>Posture : calme, bienveillant, presque complice ; jamais autoritaire avec Habitat.</li><li>Stratégie : parler d’“expériences sociales” pour couvrir les manipulations, faire croire à l’Habitat qu’il prépare mieux que prévu les habitants.</li></ul><p><strong>Action :</strong> fin du tête-à-tête. Rappelle l’Habitat si besoin (ou gardez vos secrets pour le jeu).</p><h4>4) Reprise de séance — Lancement de la partie</h4><p><strong>Option d’ouverture côté Habitants :</strong> un événement déclencheur dans l’Habitat (panne ventilation d’une aile, menace de suffocation en quelques heures, etc.). Tu lances la pression immédiatement.</p><p><strong>Consignes de table (30 secondes) :</strong></p><ul><li>Métagame off : chaque camp ne joue que ce que son perso sait à son niveau de vérité.</li><li>Les Superviseurs peuvent coordonner en façade mais poursuivent leurs objectifs cachés.</li></ul><h4>5) Aide-mémoire express pour toi (MJ)</h4><p><strong>Chronologie du briefing</strong></p><ul><li>Commun (propagande) — 3 à 5 min.</li><li>Distribuer la Lettre + sortir les Habitants — 1 min.</li><li>Privé à 2 (Habitat + Arche) — vérité niveau 2 — 3 à 5 min.</li><li>Solo Arche — vérité niveau 3 — 3 min.</li><li>Relance : ramener tout le monde et démarrer l’événement.</li></ul><p><strong>Leviers immédiats pour les Superviseurs (dès la première heure de jeu)</strong></p><ul><li>Habitat : rationnement, couvre-feu, files d’attente, zones restreintes, cérémonial du “tirage au sort”, contrôle des rumeurs.</li><li>Arche : séjours “parfaits” + surprises dans la simu (paysages sublimes → prédateurs/catastrophes soudaines), accroche émotionnelle.</li></ul>`
             };
 
             // --- ÉTAT DE L'APPLICATION ---
@@ -852,59 +845,30 @@ Accès à l’Arche
                 clockElement.textContent = now.toLocaleTimeString('fr-FR');
             }
 
-            // Effet de machine à écrire
+            // Affiche le texte instantanément
             function typeWriter(text, onComplete = () => {}) {
                 if (typingInterval) {
                     clearInterval(typingInterval);
+                    typingInterval = null;
                 }
-                textContentElement.innerHTML = '';
-                cursorElement.style.display = 'inline-block';
-                let i = 0;
-                typingInterval = setInterval(() => {
-                    if (i < text.length) {
-                        // Remplacer les **...** par des balises <strong> pour le gras
-                        if (text.substring(i, i + 2) === '**') {
-                            let end = text.indexOf('**', i + 2);
-                            if (end !== -1) {
-                                textContentElement.innerHTML += `<strong>${text.substring(i + 2, end)}</strong>`;
-                                i = end + 2;
-                            } else {
-                                textContentElement.textContent += text.charAt(i);
-                                i++;
-                            }
-                        } else {
-                            textContentElement.textContent += text.charAt(i);
-                            i++;
-                        }
-                        textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
-                    } else {
-                        clearInterval(typingInterval);
-                        typingInterval = null;
-                        onComplete();
-                    }
-                }, 5); // Vitesse de frappe
+                // Remplacer les **...** par des balises <strong> pour le gras
+                const htmlText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                textContentElement.innerHTML = htmlText;
+                cursorElement.style.display = 'none';
+                textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+                onComplete();
             }
 
-            // Effet de machine à écrire mot par mot
+            // Affiche le texte instantanément
             function typeWriterWordByWord(text, onComplete = () => {}) {
                 if (typingInterval) {
                     clearInterval(typingInterval);
+                    typingInterval = null;
                 }
-                textContentElement.innerHTML = '';
-                cursorElement.style.display = 'inline-block';
-                const words = text.split(/(\s+)/);
-                let i = 0;
-                typingInterval = setInterval(() => {
-                    if (i < words.length) {
-                        textContentElement.innerHTML += words[i];
-                        i++;
-                        textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
-                    } else {
-                        clearInterval(typingInterval);
-                        typingInterval = null;
-                        onComplete();
-                    }
-                }, 50); // Vitesse des mots
+                textContentElement.innerHTML = text;
+                cursorElement.style.display = 'none';
+                textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+                onComplete();
             }
 
             // Afficher le contenu d'un onglet
@@ -1008,10 +972,18 @@ Accès à l’Arche
             // Connexion initiale
             connectButton.addEventListener('click', () => {
                 playSound('audio-connect');
-                bootOverlay.classList.add('hidden');
-                mainInterface.classList.add('visible');
-                // Lancer le contenu du premier onglet après la transition
-                setTimeout(() => displayTabContent('citoyens'), 500);
+
+                // Add glitch effect
+                bootOverlay.classList.add('glitching');
+
+                // After glitch, hide overlay and show main interface
+                setTimeout(() => {
+                    bootOverlay.classList.remove('glitching');
+                    bootOverlay.classList.add('hidden');
+                    mainInterface.classList.add('visible');
+                    // Lancer le contenu du premier onglet
+                    displayTabContent('citoyens');
+                }, 600); // Match animation duration
             });
 
             // Changement de thème
