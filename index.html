@@ -544,19 +544,47 @@
             document.addEventListener('keydown', () => playSound('audio-key'));
 
             // --- CONTENU TEXTUEL DES ONGLETS ---
-            const contentData = {
-                citoyens: `> ACCÈS PUBLIC - PROPAGANDE OFFICIELLE VAULT-TEC\n
---------------------------------------------------\n
-**Lettre de Bienvenue aux Habitants de l'Abri 202**\n
+            const welcomeLetter = `**Lettre de Bienvenue aux Habitants de l'Abri 202**\n
 Chers futurs résidents,\n
 Félicitations ! En recevant cette lettre, vous avez été sélectionnés pour faire partie d'une communauté d'exception, l'élite qui reconstruira notre grande nation. L'Abri 202, surnommé "L'Arche", n'est pas un simple refuge, mais le berceau d'un avenir radieux.\n
 Grâce à la technologie de pointe de Vault-Tec, vous vivrez dans un confort et une sécurité inégalés, à l'abri des dangers du monde extérieur. Vos enfants grandiront dans un environnement sain, éduqués par les meilleurs, et préparés à devenir les leaders de demain.\n
 Votre contribution est essentielle. Ensemble, nous allons construire un meilleur lendemain, aujourd'hui.\n
 Cordialement,\n
-Le Superviseur\n
-\n**Fiche Joueur – Version Habitants**\n
-Bienvenue, citoyen ! Vous êtes un pilier de notre communauté. Votre rôle est de vivre, de prospérer et de contribuer au bien-être général de l'Abri. Respectez les règles, participez aux activités communautaires et faites confiance à votre Superviseur. Votre bonheur est notre priorité.`,
+Le Superviseur`;
 
+            const officialDocument = `Document Officiel – Diffusion Générale\n
+VAULT-TEC CORPORATION – Service Relations Citoyennes\n
+Abri 202 – Bienvenue dans L’Arche\n
+Chers résidents,\n
+Bienvenue dans votre nouveau foyer, l’Abri 202 — une merveille d’ingénierie humaine conçue par Vault-Tec pour garantir votre sécurité, votre confort et votre avenir, même face aux défis du monde extérieur.\n
+L’Abri 202 est unique au monde : il abrite deux sections complémentaires destinées à préserver toute la richesse de notre civilisation.\n
+    La Section HABITAT : votre maison, votre communauté, le lieu où vous vivrez, travaillerez et grandirez.\n
+    La Section ARCHE : un sanctuaire exceptionnel, pensé pour accueillir humains et animaux dans un environnement harmonieux, fertile et apaisant.\n
+L’Arche : un privilège par tirage au sort\n
+Chaque mois, un tirage au sort officiel et équitable désigne un petit nombre de résidents qui auront l’honneur de passer deux jours complets dans l’Arche.\n
+Imaginez :\n
+    Un paysage verdoyant sur plusieurs hectares, baigné d’une douce lumière artificielle grâce à notre nouvelle technologie Vault-Sun+.\n
+    De l’air purifié, des ruisseaux cristallins, des senteurs naturelles.\n
+    La compagnie d’animaux dociles et bienveillants.\n
+    Des repas variés et frais.\n
+Ces séjours sont pensés pour récompenser la discipline, la bonne conduite et l’esprit communautaire.\n
+Ils sont aussi l’occasion, pour chacun, de se rappeler ce pour quoi nous travaillons ensemble chaque jour.\n
+Vos superviseurs : vos protecteurs\n
+Votre bien-être et votre avenir sont confiés à deux figures dévouées :\n
+    Le Superviseur Habitat, garant de l’ordre, de la sécurité et de la bonne entente au sein de la communauté. Sa fermeté est le rempart contre le désordre, et son sens du devoir assure à chacun un quotidien sûr et organisé.\n
+    Le Superviseur Arche, gardien du sanctuaire et maître des séjours. Il veille à ce que chaque visite soit inoubliable, en harmonie avec la vision de Vault-Tec d’un monde meilleur.\n
+Ces deux leaders travaillent main dans la main, avec un seul objectif : vous offrir un avenir digne des plus grands rêves de l’humanité.\n
+Notre promesse\n
+Vault-Tec s’engage à faire de l’Abri 202 non seulement un refuge, mais un tremplin vers demain.\n
+Ici, chacun a sa place, chacun a sa valeur, et chacun a la possibilité, un jour, de découvrir la beauté éternelle de l’Arche.\n
+Ensemble, bâtissons un avenir plus radieux.\n
+Ensemble, gardons l’espoir.\n
+Ensemble, nous sommes L’Arche.\n
+Pour la sécurité, la prospérité et l’harmonie,\n
+Vault-Tec Corporation\n
+Construire un meilleur demain, aujourd’hui.`;
+            const contentData = {
+                citoyens: ``, // Sera géré dynamiquement
                 superviseurH: `> ACCRÉDITATION NIVEAU 5 - CONFIDENTIEL\n
 --------------------------------------------------\n
 **DIRECTIVE ULTRA-PRIORITAIRE - PROGRAMME "TRANSITION NUMÉRIQUE"**\n
@@ -660,7 +688,52 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                 document.querySelectorAll('.nav-bar button').forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.tab === tabId);
                 });
-                typeWriter(contentData[tabId]);
+
+                if (tabId === 'citoyens') {
+                    typeWriter(welcomeLetter, () => {
+                        const signatureArea = document.createElement('div');
+                        signatureArea.style.textAlign = 'center';
+                        signatureArea.style.marginTop = '20px';
+
+                        const signButton = document.createElement('button');
+                        signButton.textContent = 'Signer ici';
+                        // Appliquer les styles des autres boutons pour la cohérence
+                        signButton.style.fontFamily = 'inherit';
+                        signButton.style.fontSize = '1rem';
+                        signButton.style.padding = '8px 16px';
+                        signButton.style.background = 'transparent';
+                        signButton.style.border = '1px solid var(--primary-color)';
+                        signButton.style.color = 'var(--primary-color)';
+                        signButton.style.cursor = 'pointer';
+                        signButton.style.textShadow = 'inherit';
+
+                        signButton.addEventListener('mouseover', () => {
+                           signButton.style.background = 'var(--primary-color)';
+                           signButton.style.color = 'var(--color-black)';
+                        });
+                        signButton.addEventListener('mouseout', () => {
+                           signButton.style.background = 'transparent';
+                           signButton.style.color = 'var(--primary-color)';
+                        });
+
+
+                        const docInfo = document.createElement('p');
+                        docInfo.textContent = 'Document Officiel – Diffusion Générale';
+                        docInfo.style.marginTop = '10px';
+                        docInfo.style.fontSize = '0.9rem';
+
+                        signButton.addEventListener('click', () => {
+                            typeWriter(officialDocument);
+                        });
+
+                        signatureArea.appendChild(signButton);
+                        signatureArea.appendChild(docInfo);
+                        textContentElement.appendChild(signatureArea);
+                        textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+                    });
+                } else {
+                    typeWriter(contentData[tabId]);
+                }
             }
             
             // Gérer le clic sur un onglet
