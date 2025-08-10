@@ -40,48 +40,5 @@
         "body": "Félicitations, Sue Perkins !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
-  },
-  {
-    "id": "Porchin-1754861997944",
-    "nom": "Porchin",
-    "prenoms": "Boris",
-    "hashedPassword": "$2a$10$/Fh0Dp/dYGAtIKw1Z3mlU.How5cus7IaqS7g4HTWr8m4pwr2g810i",
-    "special": {
-      "S": {
-        "name": "Force",
-        "value": 1
-      },
-      "P": {
-        "name": "Perception",
-        "value": 3
-      },
-      "E": {
-        "name": "Endurance",
-        "value": 3
-      },
-      "C": {
-        "name": "Charisme",
-        "value": 5
-      },
-      "I": {
-        "name": "Intelligence",
-        "value": 7
-      },
-      "A": {
-        "name": "Agilité",
-        "value": 1
-      },
-      "L": {
-        "name": "Chance",
-        "value": 8
-      }
-    },
-    "role": "SUPERVISEUR HABITAT",
-    "emails": [
-      {
-        "from": "Vault-Tec Corporation",
-        "body": "Félicitations, Boris Porchin !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
-      }
-    ]
   }
 ]
