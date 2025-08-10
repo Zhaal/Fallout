@@ -1,4 +1,5 @@
 const { Octokit } = require("@octokit/rest");
+const bcrypt = require("bcryptjs");
 
 // IMPORTANT: Replace these with your GitHub username and repository name
 const GITHUB_USER = "Zhaal";
@@ -16,7 +17,30 @@ exports.handler = async function(event, context) {
     }
 
     const octokit = new Octokit({ auth: GITHUB_TOKEN });
-    const newCharacter = JSON.parse(event.body);
+    const characterInput = JSON.parse(event.body);
+
+    if (!characterInput.password) {
+        return { statusCode: 400, body: JSON.stringify({ error: "Password is required." }) };
+    }
+
+    // Hash the password
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(characterInput.password, salt);
+
+    // Create the final character object
+    const newCharacter = {
+        id: `${characterInput.nom}-${Date.now()}`, // Create a unique ID
+        nom: characterInput.nom,
+        prenoms: characterInput.prenoms,
+        hashedPassword: hashedPassword,
+        special: characterInput.special,
+        emails: [
+            {
+                from: "Vault-Tec Corporation",
+                body: `Félicitations, ${characterInput.prenoms} ${characterInput.nom} !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain.`
+            }
+        ]
+    };
 
     try {
         let existingData = [];
