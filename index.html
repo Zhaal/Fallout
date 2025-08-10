@@ -336,6 +336,7 @@
 
         #text-content {
             display: block;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .cursor {
@@ -429,6 +430,60 @@
             background: var(--primary-color);
             color: var(--color-black);
         }
+
+        /* --- NUKA-COLA POPUP --- */
+        .nuka-popup {
+            background: #a11c1c; /* Nuka-Cola Red */
+            border: 3px solid #ffd700; /* Gold/Yellow */
+            box-shadow: 0 0 25px #ff4500;
+            color: #fff;
+            padding: 20px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            font-family: 'VT323', monospace;
+            text-shadow: 2px 2px 2px #000;
+            border-radius: 10px;
+        }
+
+        .nuka-header {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #fff;
+            margin-bottom: 20px;
+        }
+
+        .nuka-trademark {
+            font-size: 1.5rem;
+            vertical-align: super;
+        }
+
+        .nuka-slogan {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 15px;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        .nuka-popup button {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 8px 16px;
+            margin-top: 15px;
+            background: #ffd700;
+            border: 1px solid #fff;
+            color: #a11c1c;
+            cursor: pointer;
+            text-shadow: none;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .nuka-popup button:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -513,6 +568,21 @@
         </div>
     </div>
 
+    <!-- NUKA-COLA POP-UP -->
+    <div class="modal-overlay" id="nuka-popup-overlay">
+        <div class="nuka-popup">
+            <div class="nuka-header">
+                <span class="nuka-title">NUKA-COLA</span>
+                <span class="nuka-trademark">®</span>
+            </div>
+            <div class="nuka-body">
+                <p class="nuka-slogan">ZAP THAT THIRST!</p>
+                <p>Enjoy a refreshing bottle of Nuka-Cola today!</p>
+            </div>
+            <button id="nuka-close-btn">Fermer</button>
+        </div>
+    </div>
+
     <!-- EFFETS SONORES -->
     <audio id="audio-connect" src="Connect-pipboy.wav" preload="auto"></audio>
     <audio id="audio-protected" src="accès-protégé.wav" preload="auto"></audio>
@@ -546,6 +616,9 @@
             const passwordInput = document.getElementById('password-input');
             const cancelBtn = document.getElementById('cancel-button');
 
+            const nukaPopupOverlay = document.getElementById('nuka-popup-overlay');
+            const nukaCloseBtn = document.getElementById('nuka-close-btn');
+
             // --- FONCTION SON ---
             function playSound(id) {
                 const audio = document.getElementById(id);
@@ -557,7 +630,11 @@
             document.addEventListener('keydown', () => playSound('audio-key'));
 
             // --- CONTENU TEXTUEL DES ONGLETS ---
-            const welcomeLetter = `Lettre de Bienvenue aux Habitants de l'Abri 202
+            const welcomeLetter = `VAULT-TEC CORPORATION
+---------------------
+Division de l'Abri 202
+
+Lettre de Bienvenue aux Habitants de l'Abri 202
 
 Chers futurs résidents,
 
@@ -571,265 +648,244 @@ Cordialement,
 
 Le Superviseur`;
 
-            const officialDocument = `Document Officiel – Diffusion Générale\n
-VAULT-TEC CORPORATION – Service Relations Citoyennes\n
-Abri 202 – Bienvenue dans L’Arche\n
-Chers résidents,\n
-Bienvenue dans votre nouveau foyer, l’Abri 202 — une merveille d’ingénierie humaine conçue par Vault-Tec pour garantir votre sécurité, votre confort et votre avenir, même face aux défis du monde extérieur.\n
-L’Abri 202 est unique au monde : il abrite deux sections complémentaires destinées à préserver toute la richesse de notre civilisation.\n
-    La Section HABITAT : votre maison, votre communauté, le lieu où vous vivrez, travaillerez et grandirez.\n
-    La Section ARCHE : un sanctuaire exceptionnel, pensé pour accueillir humains et animaux dans un environnement harmonieux, fertile et apaisant.\n
-L’Arche : un privilège par tirage au sort\n
-Chaque mois, un tirage au sort officiel et équitable désigne un petit nombre de résidents qui auront l’honneur de passer deux jours complets dans l’Arche.\n
-Imaginez :\n
-    Un paysage verdoyant sur plusieurs hectares, baigné d’une douce lumière artificielle grâce à notre nouvelle technologie Vault-Sun+.\n
-    De l’air purifié, des ruisseaux cristallins, des senteurs naturelles.\n
-    La compagnie d’animaux dociles et bienveillants.\n
-    Des repas variés et frais.\n
-Ces séjours sont pensés pour récompenser la discipline, la bonne conduite et l’esprit communautaire.\n
-Ils sont aussi l’occasion, pour chacun, de se rappeler ce pour quoi nous travaillons ensemble chaque jour.\n
-Vos superviseurs : vos protecteurs\n
-Votre bien-être et votre avenir sont confiés à deux figures dévouées :\n
-    Le Superviseur Habitat, garant de l’ordre, de la sécurité et de la bonne entente au sein de la communauté. Sa fermeté est le rempart contre le désordre, et son sens du devoir assure à chacun un quotidien sûr et organisé.\n
-    Le Superviseur Arche, gardien du sanctuaire et maître des séjours. Il veille à ce que chaque visite soit inoubliable, en harmonie avec la vision de Vault-Tec d’un monde meilleur.\n
-Ces deux leaders travaillent main dans la main, avec un seul objectif : vous offrir un avenir digne des plus grands rêves de l’humanité.\n
-Notre promesse\n
-Vault-Tec s’engage à faire de l’Abri 202 non seulement un refuge, mais un tremplin vers demain.\n
-Ici, chacun a sa place, chacun a sa valeur, et chacun a la possibilité, un jour, de découvrir la beauté éternelle de l’Arche.\n
-Ensemble, bâtissons un avenir plus radieux.\n
-Ensemble, gardons l’espoir.\n
-Ensemble, nous sommes L’Arche.\n
-Pour la sécurité, la prospérité et l’harmonie,\n
-Vault-Tec Corporation\n
-Construire un meilleur demain, aujourd’hui.`;
+            const officialDocument = `============================================================
+VAULT-TEC CORPORATION – Service Relations Citoyennes
+============================================================
+DOCUMENT OFFICIEL – DIFFUSION GÉNÉRALE
+------------------------------------------------------------
+
+SUJET : Bienvenue dans L’Arche, Abri 202
+
+Chers résidents,
+
+Bienvenue dans votre nouveau foyer, l’Abri 202 — une merveille d’ingénierie humaine conçue par Vault-Tec pour garantir votre sécurité, votre confort et votre avenir, même face aux défis du monde extérieur.
+
+L’Abri 202 est unique au monde : il abrite deux sections complémentaires destinées à préserver toute la richesse de notre civilisation.
+
+    > Section HABITAT : Votre maison, votre communauté, le lieu où vous vivrez, travaillerez et grandirez.
+
+    > Section ARCHE : Un sanctuaire exceptionnel, pensé pour accueillir humains et animaux dans un environnement harmonieux, fertile et apaisant.
+
+**L’Arche : Un privilège par tirage au sort**
+
+Chaque mois, un tirage au sort officiel et équitable désigne un petit nombre de résidents qui auront l’honneur de passer deux jours complets dans l’Arche.
+
+Imaginez :
+    - Un paysage verdoyant sur plusieurs hectares, baigné d’une douce lumière artificielle grâce à notre nouvelle technologie Vault-Sun+.
+    - De l’air purifié, des ruisseaux cristallins, des senteurs naturelles.
+    - La compagnie d’animaux dociles et bienveillants.
+    - Des repas variés et frais.
+
+Ces séjours sont pensés pour récompenser la discipline, la bonne conduite et l’esprit communautaire. Ils sont aussi l’occasion, pour chacun, de se rappeler ce pour quoi nous travaillons ensemble chaque jour.
+
+**Vos superviseurs : Vos protecteurs**
+
+Votre bien-être et votre avenir sont confiés à deux figures dévouées :
+
+    - Le Superviseur Habitat : Garant de l’ordre, de la sécurité et de la bonne entente. Sa fermeté est le rempart contre le désordre, et son sens du devoir assure à chacun un quotidien sûr et organisé.
+
+    - Le Superviseur Arche : Gardien du sanctuaire et maître des séjours. Il veille à ce que chaque visite soit inoubliable, en harmonie avec la vision de Vault-Tec d’un monde meilleur.
+
+Ces deux leaders travaillent main dans la main, avec un seul objectif : vous offrir un avenir digne des plus grands rêves de l’humanité.
+
+**Notre promesse**
+
+Vault-Tec s’engage à faire de l’Abri 202 non seulement un refuge, mais un tremplin vers demain.
+Ici, chacun a sa place, chacun a sa valeur, et chacun a la possibilité, un jour, de découvrir la beauté éternelle de l’Arche.
+
+Ensemble, bâtissons un avenir plus radieux.
+Ensemble, gardons l’espoir.
+Ensemble, nous sommes L’Arche.
+
+Pour la sécurité, la prospérité et l’harmonie,
+
+Vault-Tec Corporation
+"Construire un meilleur demain, aujourd’hui."`;
             const contentData = {
                 citoyens: ``, // Sera géré dynamiquement
-                superviseurH: `Document Confidentiel – Diffusion Restreinte
-VAULT-TEC CORPORATION – Département Psychologie Appliquée & Contrôle Social
-Abri 202 – Section HABITAT
-Référence dossier : VT/202-H/Ω-15
+                superviseurH: `================================================================
+  DOCUMENT CONFIDENTIEL – ACCÈS RESTREINT – NIVEAU OMEGA
+================================================================
+ORGANISATION : Vault-Tec Corporation, Dpt. Psychologie Appliquée
+SECTION      : Abri 202 – Habitat
+RÉF. DOSSIER : VT/202-H/Ω-15
+----------------------------------------------------------------
+
 [EN-TÊTE OFFICIEL]
 
-    De : Bureau de la Cohésion Humaine, Vault-Tec
-    À : Superviseur Habitat – Abri 202
-    Objet : Mandat officiel et directives – Programme Transition Numérique (Projet Arche)
-    Niveau de confidentialité : SUPERVISEUR UNIQUEMENT – Transmission interdite aux habitants
+    DESTINATAIRE : Superviseur, Section Habitat – Abri 202
+    DE           : Bureau de la Cohésion Humaine, Vault-Tec
+    OBJET        : Mandat et directives – Programme "Transition Numérique" (Projet Arche)
+    CONFIDENTIALITÉ : **SUPERVISEUR UNIQUEMENT** – Transmission interdite.
 
 Cher Superviseur,
 
 Vous avez été choisi pour diriger la section HABITAT de l’Abri 202 dans le cadre d’une expérience cruciale : déterminer si l’humanité est prête à renoncer volontairement à la vie physique pour une existence numérique améliorée.
 
-Le “Grand Choix” aura lieu dans plusieurs années.
-À ce moment-là, chaque citoyen décidera s’il préfère rester dans la réalité imparfaite… ou vivre pour toujours dans l’environnement parfait de L’Arche.
+Le “Grand Choix” aura lieu dans plusieurs années. À ce moment-là, chaque citoyen décidera s’il préfère rester dans la réalité imparfaite… ou vivre pour toujours dans l’environnement parfait de L’Arche.
 
 Votre rôle est de préparer ce choix — en créant un contraste si saisissant entre la dureté de la réalité et le confort de l’Arche que la majorité optera pour la transition numérique.
-Résumé de votre mission (version officielle)
 
-    Maintenir l’ordre, mais dans un contexte volontairement oppressant et difficile.
+**RÉSUMÉ DE MISSION (VERSION OFFICIELLE)**
+    1. Maintenir l’ordre, mais dans un contexte **volontairement oppressant** et difficile.
+    2. Garantir que les habitants voient L’Arche comme un paradis enviable.
+    3. Organiser des séjours de “découverte” (officiellement par tirage au sort).
+    4. Coopérer avec le Superviseur Arche.
+    5. **Ne jamais évoquer la nature simulée de l'Arche.**
 
-    Garantir que les habitants voient L’Arche comme un paradis enviable.
+**OBJECTIFS OPÉRATIONNELS**
+    - Rendre la vie quotidienne exigeante et frustrante (limites de sécurité minimales).
+    - Contrôler le flux d’informations pour préserver le secret.
+    - Utiliser pénuries, contraintes et règlements pour créer un climat de tension.
+    - Mettre en valeur l’Arche via propagande (récits, cérémonies, témoignages).
+    - Maintenir la façade d’un leader “qui fait de son mieux” dans un monde difficile.
 
-    Organiser régulièrement des séjours de “découverte” dans l’Arche (officiellement tirés au sort).
+**CADRE DE CROYANCE (À PROTÉGER)**
+    - L’inconfort actuel est un sacrifice nécessaire.
+    - Le Superviseur Arche partage votre mission et améliore l’Arche en secret.
+    - Les visiteurs de l’Arche y vivent une expérience réelle dans un lieu physique.
+    - Les effets secondaires (fatigue, confusion) sont dus au “dépaysement”.
 
-    Coopérer avec le Superviseur Arche, qui est en charge des séjours et de la bonne expérience des visiteurs.
+**DIRECTIVES COMPORTEMENTALES (RP)**
+    - **Posture** : Figure d’autorité ferme mais “injustement accablée”.
+    - **Méthode** : Appliquer des mesures dégradant la qualité de vie (rationnements, couvre-feu).
+    - **Communication** : Insister sur le privilège de l’Arche et la dureté de la réalité.
+    - **Mise en scène** : Faire du départ vers l’Arche un événement solennel, quasi religieux.
 
-    Ne jamais évoquer que l’Arche soit une simulation — les habitants doivent croire qu’il s’agit d’un lieu physique réel.
+**EXTRAITS DIRECTIVES INTERNES (MANIPULÉES)**
+    * "Ce n’est que dans l’ombre que l’on apprend à chérir la lumière."
+    * "Un peuple confortable ne cherche pas à évoluer. Le progrès naît de l’inconfort."
+    * "Rendez leur vie juste assez insupportable pour qu’ils embrassent le changement… et ils vous remercieront."
 
-Objectifs Officiels
-
-    Rendre la vie quotidienne exigeante et frustrante, tout en restant dans les limites de la “sécurité minimale” définie par Vault-Tec.
-
-    Contrôler le flux d’informations : personne ne doit soupçonner la nature réelle de l’Arche.
-
-    Utiliser pénuries, contraintes et règlements pour créer un climat de tension et d’inconfort.
-
-    Mettre en valeur l’Arche à travers récits, cérémonies et témoignages enthousiastes de ses visiteurs.
-
-    Maintenir la façade d’un leader protecteur “qui fait de son mieux” dans un monde difficile.
-
-Ce que vous croyez (et devez protéger)
-
-    L’inconfort actuel est un sacrifice nécessaire pour que les habitants apprécient pleinement la vie numérique.
-
-    Le Superviseur Arche partage votre mission et améliore l’Arche en secret pour le futur “Grand Choix”.
-
-    Les visiteurs de l’Arche y vivent réellement, dans un espace physique caché.
-
-    Les effets secondaires (fatigue, confusion) sont dus au “dépaysement” et disparaissent rapidement.
-
-Lignes directrices comportementales (RP)
-
-    Posture : figure d’autorité ferme mais “injustement accablée” par les contraintes du monde post-apocalyptique.
-
-    Méthode : appliquer des mesures qui semblent nécessaires à la survie mais qui dégradent la qualité de vie (ex. rationnements, couvre-feu, restrictions d’accès à certaines zones).
-
-    Communication : insister sur le fait que L’Arche est un privilège rare et que la vie réelle est dure “pour le bien commun”.
-
-    Interactions avec habitants : être parfois compatissant, mais souvent intransigeant — tout en laissant entendre que “là-bas, dans l’Arche”, tout est plus simple.
-
-    Mise en scène : faire du départ vers l’Arche un événement solennel, presque religieux, pour créer un désir profond.
-
- Extraits de directives internes (version manipulée)
-
-    “Ce n’est que dans l’ombre que l’on apprend à chérir la lumière.”
-    “Un peuple confortable ne cherche pas à évoluer. Le progrès naît de l’inconfort.”
-
-    “Rendez leur vie juste assez insupportable pour qu’ils embrassent le changement… et ils vous remercieront de les avoir guidés vers lui.”
-
-Rappel :
-Votre mission est de façonner la perception.
-Le choix final doit paraître libre… mais il doit être, dans l’esprit de la majorité, une évidence.
+RAPPEL :
+Votre mission est de façonner la perception. Le choix final doit paraître libre… mais il doit être, dans l’esprit de la majorité, une évidence.
 
 Pour l’avenir de l’humanité,
 Vault-Tec Corporation
-Construire un meilleur demain, aujourd’hui.`,
+"Construire un meilleur demain, aujourd’hui."`,
 
-                superviseurA: `Document Classifié – Diffusion Restreinte
-VAULT-TEC CORPORATION – Département Recherche & Développement Expérimental
-Abri 202 – Section ARCHE
-Référence dossier : VT/202-A/Δ-18
+                superviseurA: `================================================================
+  DOCUMENT CLASSIFIÉ – ACCÈS ULTRA-PRIORITÉ – LECTURE UNIQUE
+================================================================
+ORGANISATION : Vault-Tec Corporation, Dpt. R&D Expérimental
+SECTION      : Abri 202 – Arche
+RÉF. DOSSIER : VT/202-A/Δ-18
+----------------------------------------------------------------
+
 [EN-TÊTE OFFICIEL]
 
-    De : Direction Opérations Spéciales, Vault-Tec
-    À : Superviseur Arche – Abri 202
-    Objet : Directive opérationnelle confidentielle – Programme Mutation Contrôlée (Couverture : Transition Numérique / Projet Arche)
-    Niveau de confidentialité : ULTRA-PRIORITÉ – Lecture par destinataire unique
+    DESTINATAIRE : Superviseur, Section Arche – Abri 202
+    DE           : Direction des Opérations Spéciales, Vault-Tec
+    OBJET        : Directive opérationnelle – Programme "Mutation Contrôlée"
+    CONFIDENTIALITÉ : **ULTRA-PRIORITÉ** – Destruction après lecture recommandée.
 
 Cher Superviseur,
 
-Félicitations pour votre affectation à la direction de la section ARCHE de l’Abri 202.
-Vous êtes désormais le seul dépositaire de la vérité complète sur le projet.
-Vous savez que l’Arche n’est pas un havre physique… mais un système d’expérimentation biologique et comportementale reposant sur une simulation numérique immersive.
+Félicitations. Vous êtes le seul dépositaire de la vérité complète sur le projet Arche. Vous savez que l’Arche n’est pas un havre, mais un système d’expérimentation biologique reposant sur une simulation numérique immersive.
 
 Votre rôle est double :
+    - **Officiellement** : Gérer un sanctuaire où les citoyens séjournent.
+    - **En réalité** : Sélectionner des sujets, les plonger en sommeil artificiel, les soumettre à des radiations et injections, puis les immerger dans la simulation que vous contrôlez.
 
-    Officiellement, aux yeux du Superviseur de l’Habitat et des habitants, vous gérez un sanctuaire physique où certains citoyens peuvent passer deux jours “hors de la dure réalité” dans un environnement paisible.
+**VÉRITÉ COMPLÈTE (POUR VOUS SEUL)**
+    * **But Réel** : Provoquer, accélérer et observer des **mutations** physiques et mentales.
+    * **Méthode** : Utiliser l'anxiété de l'Abri comme catalyseur biologique.
+    * **Simulation** : Votre terrain de jeu pour pousser les sujets à leurs limites.
+    * **Le Superviseur Habitat** : Votre pion. Il croit à un test philosophique (“le Grand Choix”). Maintenez cette illusion pour assurer sa coopération.
 
-    En réalité, vous sélectionnez les sujets les plus prometteurs, les plongez dans un sommeil artificiel, les soumettez à des doses calibrées de radiations et à des injections expérimentales, puis vous les immergez dans la simulation numérique que vous contrôlez entièrement.
+**OBJECTIFS RÉELS**
+    1. **Sélection stratégique** : Choisir des candidats à potentiel génétique/psychologique.
+    2. **Optimiser le catalyseur** : Encourager le Superviseur Habitat à durcir la vie dans l'Abri.
+    3. **Expérimentation libre** : Concevoir des scénarios extrêmes dans la simulation.
+    4. **Observation et documentation** : Noter les signes de mutation, ajuster les protocoles.
+    5. **Maintien de la façade** : Garder le Superviseur Habitat dans sa croyance naïve.
 
-Vérité complète (pour vous seul)
+**EXPLOITATION DU SUPERVISEUR HABITAT**
+    - Il sait que l’Arche est une simulation.
+    - Il croit que le but est le "Grand Choix" pour un paradis numérique.
+    - Il croit que son rôle est de rendre la vie oppressive pour faciliter ce choix.
+    - **Il ignore tout des manipulations biologiques.**
 
-    But réel : provoquer, accélérer et observer des mutations physiques et mentales chez les sujets.
+**STRATÉGIE DE MANIPULATION**
+    - Encouragez-le à multiplier privations et tensions.
+    - Feignez de partager son rêve du “Grand Choix” pour sa coopération totale.
+    - Utilisez la simulation pour amplifier les effets biologiques sous couvert “d’expériences sociales”.
 
-    Méthode : l’anxiété chronique et les conflits dans l’Abri servent de catalyseur biologique, préparant le corps et l’esprit aux transformations.
+**EXTRAITS DIRECTIVES INTERNES (RÉELLES)**
+    * "Il croit forger des esprits prêts à choisir la lumière. Vous, vous sculptez des corps qui n’auront plus le choix."
+    * "Laissez-le penser que c’est son projet. Un homme qui croit diriger est un pion idéal."
+    * "L’illusion parfaite est celle que l’on partage à deux… et dont un seul connaît la fin."
 
-    Simulation : l’Arche est votre terrain de jeu, où vous pouvez manipuler l’environnement, les événements et même les lois physiques pour pousser les sujets dans leurs retranchements.
-
-    Le Superviseur de l’Habitat : croit que le but est un test philosophique (“le Grand Choix”) pour savoir si les habitants préfèreraient vivre dans un monde virtuel parfait. Vault-Tec vous ordonne de maintenir cette illusion afin qu’il collabore activement à la création de conditions de vie oppressantes.
-
-Vos objectifs réels
-
-    Sélection stratégique : choisir des candidats présentant un potentiel génétique et psychologique intéressant pour les mutations.
-
-    Optimiser le catalyseur : encourager le Superviseur de l’Habitat à rendre la vie dans l’Abri difficile, afin que la transition vers l’Arche soit perçue comme une délivrance.
-
-    Expérimentation libre : concevoir dans la simulation des scénarios extrêmes pour tester les limites physiques et mentales des sujets.
-
-    Observation et documentation : noter les signes précoces de mutation, ajuster les doses et les paramètres de la simulation en conséquence.
-
-    Maintien de la façade : garder le Superviseur de l’Habitat dans sa croyance naïve afin qu’il reste un allié involontaire.
-
-Ce que croit le Superviseur Habitat (et que vous devez exploiter)
-
-    Il sait que l’Arche est une simulation.
-
-    Il croit que le but de Vault-Tec est de voir si les habitants choisiront volontairement de quitter la réalité pour vivre dans un paradis numérique.
-
-    Il pense que son rôle est de rendre la vie dans l’Abri suffisamment oppressante pour que ce choix devienne évident.
-
-    Il ignore totalement les manipulations biologiques et les mutations.
-
- Stratégie :
-
-    L’encourager à multiplier privations et tensions.
-
-    Feindre de partager son rêve “du Grand Choix” pour obtenir son entière coopération.
-
-    Utiliser la simulation pour amplifier les effets biologiques des traitements, sous couvert “d’expériences sociales”.
-
-Lignes directrices comportementales (RP)
-
-    Posture : calme, bienveillant, presque complice — jamais autoritaire avec le Superviseur Habitat.
-
-    Communication interne : valoriser son travail, lui faire croire qu’il “prépare” les habitants mieux que prévu.
-
-    Simulation : introduire des éléments addictifs (paysages sublimes, confort extrême) et des défis soudains (prédateurs, catastrophes) pour maximiser stress et dépendance.
-
-    Observation : surveiller les signes de mutation au retour des sujets, puis ajuster la dose ou la durée d’exposition au cycle suivant.
-
-Extraits de directives internes
-
-    “Il croit qu’il forge des esprits prêts à choisir la lumière. Vous, vous sculptez des corps qui n’auront plus le choix.”
-
-    “Laissez-le penser que c’est son projet. Un homme qui croit diriger est un pion idéal.”
-
-    “L’illusion parfaite est celle que l’on partage à deux… et dont un seul connaît la fin.”
-
-Rappel :
-Vous êtes l’architecte de l’Arche.
-Les habitants ne doivent jamais comprendre qu’ils sont déjà devenus les prototypes de la prochaine étape de l’humanité.
+RAPPEL :
+Vous êtes l’architecte de l’Arche. Les habitants ne doivent jamais comprendre qu’ils sont devenus les prototypes de la prochaine étape de l’humanité.
 
 Pour l’avenir de l’espèce,
 Vault-Tec Corporation
-Construire un meilleur demain, aujourd’hui.`,
+"Construire un meilleur demain, aujourd’hui."`,
 
-                contexte: `Présentation du JDR – Abri 202 : L’Arche
-Contexte
+                contexte: `============================================================
+  PRÉSENTATION DU JDR – ABRI 202 : L’ARCHE
+============================================================
 
-L’action se déroule dans l’univers post-apocalyptique de Fallout.
-Les bombes sont tombées. Votre groupe de joueurs est confiné dans l’Abri 202, un complexe Vault-Tec présenté comme une prouesse d’ingénierie destinée à préserver l’humanité… et bien plus encore.
-Rôles des joueurs
+**CONTEXTE GÉNÉRAL**
 
-    1 joueur – Superviseur Arche
-    Officiellement, gardien d’un sanctuaire luxueux appelé L’Arche, il sélectionne les habitants qui auront le “privilège” d’y séjourner deux jours.
-    En réalité, il est le seul à connaître le vrai but de l’expérience : plonger les habitants dans un sommeil artificiel, les exposer à des radiations et des injections expérimentales, puis les enfermer dans une simulation numérique sous son contrôle, afin de provoquer et observer leur mutation.
+L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombes sont tombées. Votre groupe est confiné dans l’Abri 202, un complexe Vault-Tec présenté comme une prouesse d’ingénierie.
 
-    1 joueur – Superviseur Habitat
-    Il pense que Vault-Tec veut tester si l’humanité est prête à abandonner la réalité pour un monde virtuel parfait (“Le Grand Choix”).
-    Son rôle : rendre la vie quotidienne suffisamment dure pour que la majorité voie l’Arche comme une délivrance.
-    Il sait que l’Arche est une simulation… mais ignore totalement les expérimentations biologiques.
+**RÔLES DES JOUEURS**
 
-    Autres joueurs – Habitants
-    Chaque joueur incarne un résident responsable d’une “aile” de l’Abri (100 personnes : 1 PJ + 99 PNJ), regroupées par profil (sportifs, intellectuels, créatifs, etc.).
+    **1. Superviseur Arche**
+    - *Officiellement* : Gardien d’un sanctuaire luxueux, "L’Arche".
+    - *En réalité* : Il plonge les habitants en sommeil artificiel, les expose à des radiations et injections, puis les enferme dans une simulation numérique pour provoquer et observer leur **mutation**.
 
-Ce que croit la population
+    **2. Superviseur Habitat**
+    - *Sa croyance* : Il teste si l’humanité est prête à abandonner la réalité pour un monde virtuel parfait (“Le Grand Choix”).
+    - *Son rôle* : Rendre la vie quotidienne dure pour que L’Arche paraisse une délivrance.
+    - *Son ignorance* : Il sait que l'Arche est une simulation, mais ignore tout des expériences biologiques.
 
-    L’Abri 202 serait composé de deux sections :
+    **3. Habitants**
+    - Chaque joueur incarne un résident responsable d’une “aile” de l’Abri (1 PJ + 99 PNJ), regroupée par profil (sportifs, intellectuels, etc.).
 
-        Section Habitat : lieu de vie des habitants.
+**CE QUE CROIT LA POPULATION**
 
-        Section Arche : espace paradisiaque, accueillant humains et animaux, séparé en deux zones (herbivores à l’Abri 202, carnivores dans un “Abri 404” jumeau).
+    - L’Abri 202 a deux sections : Habitat (vie) et Arche (paradis).
+    - L’Arche est un lieu physique réel avec des animaux, séparé en deux zones (herbivores ici, carnivores dans un "Abri 404").
+    - *La vérité* : L'Abri 404 n'existe pas. Le couloir vers l'Arche mène à une salle secrète où les sujets sont endormis et connectés.
 
-    En réalité, l’Abri 404 n’existe pas. Derrière le “couloir vers l’Arche” se trouve seulement une petite salle de “décontamination”… qui mène en fait à la pièce secrète où les sujets sont endormis et connectés à la simulation.
+**OBJECTIFS DES RÔLES**
 
-Objectifs des rôles
+    > **Superviseur Habitat** : Créer un climat oppressant, contrôler l'information, maintenir l'illusion d'une Arche physique.
+    > **Superviseur Arche** : Manipuler le Superviseur Habitat, mener des expériences extrêmes dans la simulation.
+    > **Habitants** : Survivre, comprendre la vérité, ou simplement profiter des opportunités.
 
-    Superviseur Habitat :
-    Créer tensions et climat oppressant, contrôler l’information, orchestrer des pénuries et restrictions.
-    Maintenir la croyance que l’Arche est un lieu physique.
+**ACCÈS À L’ARCHE**
 
-    Superviseur Arche :
-    Manipuler le Superviseur Habitat, sélectionner les meilleurs “candidats”, mener des expériences extrêmes dans la simulation pour pousser mutations et dépendance.
+    - *Version officielle* : Tirage au sort mensuel, juste et transparent.
+    - *En réalité* : Les deux superviseurs choisissent qui partira pour un séjour de deux jours... dans la simulation.`,
 
-    Habitants :
-    Survivre, préserver leur santé mentale, comprendre la vérité… ou simplement profiter de chaque opportunité.
+                mj: `<h3>Tableau d'Événements Aléatoires (d20)</h3><table style="width:100%; border-collapse: collapse; margin-bottom: 1em;" border="1"><thead><tr style="text-align: left;"><th style="padding: 5px;">d20</th><th style="padding: 5px;">Version Officielle</th><th style="padding: 5px;">Version Réelle</th><th style="padding: 5px;">Exploitation Superviseur</th></tr></thead><tbody><tr><td style="padding: 5px;">1</td><td style="padding: 5px;">Panne mineure d’eau chaude</td><td style="padding: 5px;">Test de privation pour observer le stress</td><td style="padding: 5px;">Rationne, provoque plaintes</td></tr><tr><td style="padding: 5px;">2</td><td style="padding: 5px;">Incident électrique dans une aile</td><td style="padding: 5px;">Coupure volontaire ciblée</td><td style="padding: 5px;">Isoler un groupe, créer tension</td></tr><tr><td style="padding: 5px;">3</td><td style="padding: 5px;">Animal “échappé” de l’Arche</td><td style="padding: 5px;">Faux incident pour propagande</td><td style="padding: 5px;">Fouilles, suspicion entre ailes</td></tr><tr><td style="padding: 5px;">4</td><td style="padding: 5px;">Fatigue collective inexpliquée</td><td style="padding: 5px;">Effets secondaires d’exposition</td><td style="padding: 5px;">Accuse mauvaise discipline</td></tr><tr><td style="padding: 5px;">5</td><td style="padding: 5px;">Mur fissuré dans l’aile agricole</td><td style="padding: 5px;">Sabotage interne orchestré</td><td style="padding: 5px;">Interrompt production, accuse négligence</td></tr><tr><td style="padding: 5px;">6</td><td style="padding: 5px;">Message radio brouillé reçu</td><td style="padding: 5px;">Faux signal contrôlé par Arche</td><td style="padding: 5px;">Augmente paranoïa</td></tr><tr><td style="padding: 5px;">7</td><td style="padding: 5px;">Feu mineur dans zone commune</td><td style="padding: 5px;">Mise en scène pour tester réactions</td><td style="padding: 5px;">Restreint accès à zones clés</td></tr><tr><td style="padding: 5px;">8</td><td style="padding: 5px;">Maladie bénigne</td><td style="padding: 5px;">Infection volontairement propagée</td><td style="padding: 5px;">Quarantaine stricte</td></tr><tr><td style="padding: 5px;">9</td><td style="padding: 5px;">Vol de rations</td><td style="padding: 5px;">Vol organisé par Habitat</td><td style="padding: 5px;">Punit collectivement</td></tr><tr><td style="padding: 5px;">10</td><td style="padding: 5px;">Apparition de graffitis anti-Vault-Tec</td><td style="padding: 5px;">Créés par agent provocateur</td><td style="padding: 5px;">Campagne de propagande</td></tr><tr><td style="padding: 5px;">11</td><td style="padding: 5px;">Panne de ventilation</td><td style="padding: 5px;">Scénario de stress respiratoire</td><td style="padding: 5px;">Imposer masque et restrictions</td></tr><tr><td style="padding: 5px;">12</td><td style="padding: 5px;">Tirage au sort spécial “enfants”</td><td style="padding: 5px;">Choix orienté par superviseurs</td><td style="padding: 5px;">Valorise familles dociles</td></tr><tr><td style="padding: 5px;">13</td><td style="padding: 5px;">Disparition d’un habitant</td><td style="padding: 5px;">Envoi secret vers Arche</td><td style="padding: 5px;">Rumeurs contrôlées</td></tr><tr><td style="padding: 5px;">14</td><td style="padding: 5px;">Fuite d’un “prisonnier”</td><td style="padding: 5px;">Faux détenu introduit</td><td style="padding: 5px;">Justifie couvre-feu</td></tr><tr><td style="padding: 5px;">15</td><td style="padding: 5px;">Objets “interdits” trouvés</td><td style="padding: 5px;">Pièges posés par Habitat</td><td style="padding: 5px;">Perquisitions, peur collective</td></tr><tr><td style="padding: 5px;">16</td><td style="padding: 5px;">Fête de la Lumière</td><td style="padding: 5px;">Cérémonie propagande</td><td style="padding: 5px;">Discours, chants obligatoires</td></tr><tr><td style="padding: 5px;">17</td><td style="padding: 5px;">Incident de cuisine (explosion)</td><td style="padding: 5px;">Acte volontaire</td><td style="padding: 5px;">Réduit qualité repas</td></tr><tr><td style="padding: 5px;">18</td><td style="padding: 5px;">Concours artistique “Hommage à l’Arche”</td><td style="padding: 5px;">Test de propagande</td><td style="padding: 5px;">Évaluer loyauté créative</td></tr><tr><td style="padding: 5px;">19</td><td style="padding: 5px;">Température glaciale soudaine</td><td style="padding: 5px;">Manipulation du climat interne</td><td style="padding: 5px;">Forcer regroupement</td></tr><tr><td style="padding: 5px;">20</td><td style="padding: 5px;">Nouvelle “loi” imposée</td><td style="padding: 5px;">Mesure arbitraire pour contrôle</td><td style="padding: 5px;">Tester obéissance</td></tr></tbody></table>
+<br>
+<h3>Plan de briefing MJ — Projet Arche</h3>
+<h4>Phase 0: Pré-Session</h4>
+<p><strong>Matériel à distribuer :</strong></p>
+<ul><li><strong>Habitants :</strong> "Lettre de Bienvenue Officielle" (propagande).</li><li><strong>Superviseur Habitat :</strong> Dossier de mission "Transition Numérique".</li><li><strong>Superviseur Arche :</strong> Directive "Mutation Contrôlée".</li></ul>
 
-Rôle du MJ
+<h4>Phase 1: Briefing Commun (Tous les joueurs)</h4>
+<p><strong>Objectif :</strong> Établir la façade officielle.</p>
+<p><strong>Narratif :</strong> Vous êtes dans l'Abri 202. Il y a la section Habitat (votre vie) et la section Arche (un paradis physique). Un tirage au sort mensuel récompense les bons citoyens par un séjour dans l'Arche.</p>
+<p><strong>Action :</strong> Distribuer la lettre aux Habitants, puis les isoler temporairement.</p>
 
-    Introduire des événements déclencheurs :
-    Exemple : “La ventilation de l’aile des sportifs tombe en panne. Les 100 occupants n’ont que quelques heures avant de suffoquer…”
+<h4>Phase 2: Briefing Sécurisé (Superviseurs Habitat & Arche)</h4>
+<p><strong>Objectif :</strong> Révéler le niveau 1 de la vérité.</p>
+<p><strong>Narratif :</strong> "La version publique est un mensonge. L'Arche est une simulation. Notre but est de tester si l'humanité choisirait un paradis numérique. Habitat, votre rôle est de rendre la réalité... difficile. Arche, votre rôle est de rendre la simulation... parfaite."</p>
+<p><strong>Action :</strong> Isoler le Superviseur Habitat.</p>
 
-    Gérer l’illusion et la tension entre les deux superviseurs et les habitants.
+<h4>Phase 3: Briefing Top-Secret (MJ & Superviseur Arche)</h4>
+<p><strong>Objectif :</strong> Révéler la vérité ultime.</p>
+<p><strong>Narratif :</strong> "La simulation n'est qu'un outil. Le but réel est l'expérimentation biologique. Vous sélectionnez les sujets, les endormez, les irradiez, et observez les mutations dans la simulation. Le Superviseur Habitat est votre instrument pour catalyser le processus. Ne le laissez jamais l'apprendre."</p>
 
-    Maintenir le double niveau de réalité : ce que croient les habitants / ce qui se passe réellement.
-
-Accès à l’Arche
-
-    Version officielle : tirage au sort mensuel, équitable et transparent.
-
-    En réalité : les deux superviseurs choisissent qui “partira” pour un séjour de deux jours… dans la simulation.`,
-
-                mj: `<h3>Tableau d'Événements Aléatoires (d20)</h3><table style="width:100%; border-collapse: collapse; margin-bottom: 1em;" border="1"><thead><tr style="text-align: left;"><th style="padding: 5px;">d20</th><th style="padding: 5px;">Version Officielle</th><th style="padding: 5px;">Version Réelle</th><th style="padding: 5px;">Exploitation Superviseur</th></tr></thead><tbody><tr><td style="padding: 5px;">1</td><td style="padding: 5px;">Panne mineure d’eau chaude</td><td style="padding: 5px;">Test de privation pour observer le stress</td><td style="padding: 5px;">Rationne, provoque plaintes</td></tr><tr><td style="padding: 5px;">2</td><td style="padding: 5px;">Incident électrique dans une aile</td><td style="padding: 5px;">Coupure volontaire ciblée</td><td style="padding: 5px;">Isoler un groupe, créer tension</td></tr><tr><td style="padding: 5px;">3</td><td style="padding: 5px;">Animal “échappé” de l’Arche</td><td style="padding: 5px;">Faux incident pour propagande</td><td style="padding: 5px;">Fouilles, suspicion entre ailes</td></tr><tr><td style="padding: 5px;">4</td><td style="padding: 5px;">Fatigue collective inexpliquée</td><td style="padding: 5px;">Effets secondaires d’exposition</td><td style="padding: 5px;">Accuse mauvaise discipline</td></tr><tr><td style="padding: 5px;">5</td><td style="padding: 5px;">Mur fissuré dans l’aile agricole</td><td style="padding: 5px;">Sabotage interne orchestré</td><td style="padding: 5px;">Interrompt production, accuse négligence</td></tr><tr><td style="padding: 5px;">6</td><td style="padding: 5px;">Message radio brouillé reçu</td><td style="padding: 5px;">Faux signal contrôlé par Arche</td><td style="padding: 5px;">Augmente paranoïa</td></tr><tr><td style="padding: 5px;">7</td><td style="padding: 5px;">Feu mineur dans zone commune</td><td style="padding: 5px;">Mise en scène pour tester réactions</td><td style="padding: 5px;">Restreint accès à zones clés</td></tr><tr><td style="padding: 5px;">8</td><td style="padding: 5px;">Maladie bénigne</td><td style="padding: 5px;">Infection volontairement propagée</td><td style="padding: 5px;">Quarantaine stricte</td></tr><tr><td style="padding: 5px;">9</td><td style="padding: 5px;">Vol de rations</td><td style="padding: 5px;">Vol organisé par Habitat</td><td style="padding: 5px;">Punit collectivement</td></tr><tr><td style="padding: 5px;">10</td><td style="padding: 5px;">Apparition de graffitis anti-Vault-Tec</td><td style="padding: 5px;">Créés par agent provocateur</td><td style="padding: 5px;">Campagne de propagande</td></tr><tr><td style="padding: 5px;">11</td><td style="padding: 5px;">Panne de ventilation</td><td style="padding: 5px;">Scénario de stress respiratoire</td><td style="padding: 5px;">Imposer masque et restrictions</td></tr><tr><td style="padding: 5px;">12</td><td style="padding: 5px;">Tirage au sort spécial “enfants”</td><td style="padding: 5px;">Choix orienté par superviseurs</td><td style="padding: 5px;">Valorise familles dociles</td></tr><tr><td style="padding: 5px;">13</td><td style="padding: 5px;">Disparition d’un habitant</td><td style="padding: 5px;">Envoi secret vers Arche</td><td style="padding: 5px;">Rumeurs contrôlées</td></tr><tr><td style="padding: 5px;">14</td><td style="padding: 5px;">Fuite d’un “prisonnier”</td><td style="padding: 5px;">Faux détenu introduit</td><td style="padding: 5px;">Justifie couvre-feu</td></tr><tr><td style="padding: 5px;">15</td><td style="padding: 5px;">Objets “interdits” trouvés</td><td style="padding: 5px;">Pièges posés par Habitat</td><td style="padding: 5px;">Perquisitions, peur collective</td></tr><tr><td style="padding: 5px;">16</td><td style="padding: 5px;">Fête de la Lumière</td><td style="padding: 5px;">Cérémonie propagande</td><td style="padding: 5px;">Discours, chants obligatoires</td></tr><tr><td style="padding: 5px;">17</td><td style="padding: 5px;">Incident de cuisine (explosion)</td><td style="padding: 5px;">Acte volontaire</td><td style="padding: 5px;">Réduit qualité repas</td></tr><tr><td style="padding: 5px;">18</td><td style="padding: 5px;">Concours artistique “Hommage à l’Arche”</td><td style="padding: 5px;">Test de propagande</td><td style="padding: 5px;">Évaluer loyauté créative</td></tr><tr><td style="padding: 5px;">19</td><td style="padding: 5px;">Température glaciale soudaine</td><td style="padding: 5px;">Manipulation du climat interne</td><td style="padding: 5px;">Forcer regroupement</td></tr><tr><td style="padding: 5px;">20</td><td style="padding: 5px;">Nouvelle “loi” imposée</td><td style="padding: 5px;">Mesure arbitraire pour contrôle</td><td style="padding: 5px;">Tester obéissance</td></tr></tbody></table><h3>Plan de briefing MJ — Abri 202 : L’Arche</h3><h4>0) Préparation (avant d’asseoir les joueurs)</h4><p><strong>À imprimer / distribuer</strong></p><ul><li>Pour chaque Habitant : Lettre – version officielle (Document Officiel – Diffusion Générale).</li><li>1 dossier Superviseur Habitat – directives (confidentiel).</li><li>1 dossier Superviseur Arche – directives (ultra-confidentiel).</li><li>Éventuellement une fiche d’accueil version habitants récap (propagande Vault-Tec).</li></ul><h4>1) Briefing COMMUN (tous les joueurs ensemble) — La façade officielle</h4><p><strong>Objectif :</strong> installer l’univers et la propagande Vault-Tec sans rien révéler.<br><strong>Ce qu’ils doivent croire en sortant :</strong> L’Abri 202 comporte Section Habitat (vie quotidienne) + Section Arche (sanctuaire paradisiaque), avec tirage au sort mensuel pour 2 jours de rêve ; deux superviseurs veillent à leur bien-être.</p><p><strong>À dire (court, impactant) :</strong></p><ul><li>“Bienvenue dans l’Abri 202. Vous êtes les survivants choisis pour bâtir un avenir meilleur.”</li><li>“L’Abri a deux sections : HABITAT — votre foyer ; ARCHE — un sanctuaire harmonieux, fertile, apaisant.”</li><li>“Chaque mois, un tirage officiel désigne des heureux élus pour 2 jours dans l’Arche : paysages verdoyants, air pur, repas frais, animaux dociles.”</li><li>“Deux Superviseurs vous protègent : Habitat (ordre, sécurité) et Arche (gardien du sanctuaire).”</li></ul><p><strong>Vérité officielle #1 à marteler :</strong> l’Arche est un lieu réel idyllique ET la discipline sera récompensée.</p><p><strong>Action :</strong> tu distribues la Lettre aux Habitants et tu les fais sortir dans une autre pièce/couloir. (Consigne hors-jeu : pas de métagaming, lisez la lettre tranquillement.)</p><h4>2) Briefing PRIVÉ (reste Superviseur Habitat + Superviseur Arche) — “Ce que vous venez d’entendre était de la propagande.”</h4><p><strong>Objectif :</strong> casser la façade, donner la version Habitat (niveau 2 de vérité) devant les deux, sans révéler les expériences biologiques.<br><strong>Ce qu’ils doivent croire en sortant (avant la scission) :</strong> L’Arche est une simulation tenue secrète du public ; le but est de préparer “Le Grand Choix” (réalité vs paradis numérique). Le Habitat doit rendre la vie dure pour rendre l’Arche enviable. L’Arche “améliore” l’expérience.</p><p><strong>À dire :</strong></p><ul><li>“Ce que vous avez entendu, c’était la version publique. En vérité, l’<strong>Arche est une simulation. Personne ne doit l’apprendre.</strong>”</li><li>“Le but officiel interne : tester si l’humanité est prête à abandonner la réalité pour une existence numérique meilleure — le Grand Choix.”</li><li>“Habitat, votre rôle : créer un contraste fort. Rationnements, couvre-feu, pénuries, tension — tout en restant dans la sécurité minimale. Vous mettez en scène l’Arche comme un privilège rare.”</li><li>“Arche, vous orchestrez les séjours pour qu’ils soient inoubliables et alimentent le désir d’y retourner.”</li></ul><p><strong>Vérités à déposer (niveau 2) :</strong></p><ul><li>L’Arche est numérique, mais strictement secret ; jamais devant les Habitants.</li><li>Habitat : vous incarnez la fermeté “pour le bien commun” ; vous contrôlez l’info et mettez en valeur l’Arche via cérémonies/récits/témoignages.</li><li>Arche : vous êtes le maître des séjours ; expérience douce, addictive, exemplaire. (Restez neutre ici sur la biologie.)</li></ul><p><strong>Règles RP rapides (communes, niveau 2) :</strong></p><ul><li>Ne jamais parler de “simulation” aux Habitants. Toujours parler d’un lieu physique (façade).</li><li>Habitat : posture autorité protectrice, “monde dur = sacrifices nécessaires”. Levez des obstacles concrets (files, quotas, pannes).</li><li>Arche : posture bienveillante, complice, “expérience parfaite”. (Encore sans la biologie à ce stade.)</li></ul><p><strong>Action :</strong> maintenant, tu fais sortir le Superviseur Habitat. Reste seul avec l’Arche.</p><h4>3) Briefing ULTRA-PRIVÉ (MJ + Superviseur Arche seulement) — “Ce que je viens de dire était encore incomplet.”</h4><p><strong>Objectif :</strong> livrer la vérité ultime au Superviseur Arche : la simulation est le masque d’un programme d’expérimentation biologique (radiations, injections) pour provoquer/observer des mutations.</p><p><strong>À dire :</strong></p><ul><li>“Version finale, pour vous seul : l’Arche n’est pas qu’une simulation — c’est un dispositif expérimental. Vous sélectionnez les sujets, vous les endormez, exposition calibrée aux radiations + injections ; puis vous les immergez dans la simulation que vous contrôlez.”</li><li>“But réel : provoquer, accélérer et observer des mutations physiques/mentales — la dépendance à l’Arche nous aide à pousser plus loin.”</li><li>“Le Superviseur Habitat doit rester dans l’illusion du ‘Grand Choix’. Manipulez-le en l’encourageant à durcir l’Habitat : ça optimise le catalyseur (stress, anxiété) pour nos résultats.”</li></ul><p><strong>Vérités à déposer (niveau 3) :</strong></p><ul><li>Vous seul détenez la vérité complète. Gardez l’Habitat docile et utile.</li><li>La simulation est votre terrain d’essai : vous pouvez modifier l’environnement, les lois physiques, introduire des menaces soudaines.</li><li>Procédure : sélection stratégique (profil génétique/psychologique), dosage ajusté, observation au retour, itération.</li></ul><p><strong>RP spécifiques Arche :</strong></p><ul><li>Posture : calme, bienveillant, presque complice ; jamais autoritaire avec Habitat.</li><li>Stratégie : parler d’“expériences sociales” pour couvrir les manipulations, faire croire à l’Habitat qu’il prépare mieux que prévu les habitants.</li></ul><p><strong>Action :</strong> fin du tête-à-tête. Rappelle l’Habitat si besoin (ou gardez vos secrets pour le jeu).</p><h4>4) Reprise de séance — Lancement de la partie</h4><p><strong>Option d’ouverture côté Habitants :</strong> un événement déclencheur dans l’Habitat (panne ventilation d’une aile, menace de suffocation en quelques heures, etc.). Tu lances la pression immédiatement.</p><p><strong>Consignes de table (30 secondes) :</strong></p><ul><li>Métagame off : chaque camp ne joue que ce que son perso sait à son niveau de vérité.</li><li>Les Superviseurs peuvent coordonner en façade mais poursuivent leurs objectifs cachés.</li></ul><h4>5) Aide-mémoire express pour toi (MJ)</h4><p><strong>Chronologie du briefing</strong></p><ul><li>Commun (propagande) — 3 à 5 min.</li><li>Distribuer la Lettre + sortir les Habitants — 1 min.</li><li>Privé à 2 (Habitat + Arche) — vérité niveau 2 — 3 à 5 min.</li><li>Solo Arche — vérité niveau 3 — 3 min.</li><li>Relance : ramener tout le monde et démarrer l’événement.</li></ul><p><strong>Leviers immédiats pour les Superviseurs (dès la première heure de jeu)</strong></p><ul><li>Habitat : rationnement, couvre-feu, files d’attente, zones restreintes, cérémonial du “tirage au sort”, contrôle des rumeurs.</li><li>Arche : séjours “parfaits” + surprises dans la simu (paysages sublimes → prédateurs/catastrophes soudaines), accroche émotionnelle.</li></ul>`
+<h4>Phase 4: Lancement du Jeu</h4>
+<p><strong>Scénario d'ouverture :</strong> Déclencher une crise immédiate (ex: panne de ventilation, menace de suffocation) pour forcer les décisions.</p>
+<p><strong>Règle clé :</strong> Le métagaming est interdit. L'information est votre ressource la plus précieuse.</p>`
             };
 
             // --- ÉTAT DE L'APPLICATION ---
@@ -855,7 +911,7 @@ Accès à l’Arche
                 const htmlText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 textContentElement.innerHTML = htmlText;
                 cursorElement.style.display = 'none';
-                textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+                textContentElement.parentElement.scrollTop = 0;
                 onComplete();
             }
 
@@ -867,7 +923,7 @@ Accès à l’Arche
                 }
                 textContentElement.innerHTML = text;
                 cursorElement.style.display = 'none';
-                textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+                textContentElement.parentElement.scrollTop = 0;
                 onComplete();
             }
 
@@ -878,51 +934,59 @@ Accès à l’Arche
                     btn.classList.toggle('active', btn.dataset.tab === tabId);
                 });
 
-                if (tabId === 'citoyens') {
-                    typeWriterWordByWord(welcomeLetter, () => {
-                        const signatureArea = document.createElement('div');
-                        signatureArea.style.textAlign = 'center';
-                        signatureArea.style.marginTop = '20px';
+                textContentElement.style.opacity = '0'; // On rend le contenu invisible
 
-                        const signButton = document.createElement('button');
-                        signButton.textContent = 'Signer ici';
-                        // Appliquer les styles des autres boutons pour la cohérence
-                        signButton.style.fontFamily = 'inherit';
-                        signButton.style.fontSize = '1rem';
-                        signButton.style.padding = '8px 16px';
-                        signButton.style.background = 'transparent';
-                        signButton.style.border = '1px solid var(--primary-color)';
-                        signButton.style.color = 'var(--primary-color)';
-                        signButton.style.cursor = 'pointer';
-                        signButton.style.textShadow = 'inherit';
+                setTimeout(() => {
+                    if (tabId === 'citoyens') {
+                        typeWriterWordByWord(welcomeLetter, () => {
+                            const signatureArea = document.createElement('div');
+                            signatureArea.style.textAlign = 'center';
+                            signatureArea.style.marginTop = '20px';
 
-                        signButton.addEventListener('mouseover', () => {
-                           signButton.style.background = 'var(--primary-color)';
-                           signButton.style.color = 'var(--color-black)';
+                            const signButton = document.createElement('button');
+                            signButton.textContent = 'Signer ici';
+                            // Appliquer les styles des autres boutons pour la cohérence
+                            signButton.style.fontFamily = 'inherit';
+                            signButton.style.fontSize = '1rem';
+                            signButton.style.padding = '8px 16px';
+                            signButton.style.background = 'transparent';
+                            signButton.style.border = '1px solid var(--primary-color)';
+                            signButton.style.color = 'var(--primary-color)';
+                            signButton.style.cursor = 'pointer';
+                            signButton.style.textShadow = 'inherit';
+
+                            signButton.addEventListener('mouseover', () => {
+                               signButton.style.background = 'var(--primary-color)';
+                               signButton.style.color = 'var(--color-black)';
+                            });
+                            signButton.addEventListener('mouseout', () => {
+                               signButton.style.background = 'transparent';
+                               signButton.style.color = 'var(--primary-color)';
+                            });
+
+
+                            const docInfo = document.createElement('p');
+                            docInfo.textContent = 'Document Officiel – Diffusion Générale';
+                            docInfo.style.marginTop = '10px';
+                            docInfo.style.fontSize = '0.9rem';
+
+                            signButton.addEventListener('click', () => {
+                                textContentElement.style.opacity = '0';
+                                setTimeout(() => {
+                                    typeWriter(officialDocument);
+                                    textContentElement.style.opacity = '1';
+                                }, 500);
+                            });
+
+                            signatureArea.appendChild(signButton);
+                            signatureArea.appendChild(docInfo);
+                            textContentElement.appendChild(signatureArea);
                         });
-                        signButton.addEventListener('mouseout', () => {
-                           signButton.style.background = 'transparent';
-                           signButton.style.color = 'var(--primary-color)';
-                        });
-
-
-                        const docInfo = document.createElement('p');
-                        docInfo.textContent = 'Document Officiel – Diffusion Générale';
-                        docInfo.style.marginTop = '10px';
-                        docInfo.style.fontSize = '0.9rem';
-
-                        signButton.addEventListener('click', () => {
-                            typeWriter(officialDocument);
-                        });
-
-                        signatureArea.appendChild(signButton);
-                        signatureArea.appendChild(docInfo);
-                        textContentElement.appendChild(signatureArea);
-                        textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
-                    });
-                } else {
-                    typeWriter(contentData[tabId]);
-                }
+                    } else {
+                        typeWriter(contentData[tabId]);
+                    }
+                    textContentElement.style.opacity = '1'; // On affiche le nouveau contenu en fondu
+                }, 500); // On attend la fin de la transition
             }
             
             // Gérer le clic sur un onglet
@@ -946,6 +1010,20 @@ Accès à l’Arche
                 }
             }
             
+            // --- NUKA-COLA POPUP LOGIC ---
+            let nukaAdShown = false;
+
+            function showNukaAd() {
+                if (!nukaAdShown) {
+                    nukaPopupOverlay.classList.add('visible');
+                    nukaAdShown = true;
+                }
+            }
+
+            nukaCloseBtn.addEventListener('click', () => {
+                nukaPopupOverlay.classList.remove('visible');
+            });
+
             // Gérer la soumission du mot de passe
             function handlePasswordSubmit(e) {
                 e.preventDefault();
@@ -983,6 +1061,14 @@ Accès à l’Arche
                     mainInterface.classList.add('visible');
                     // Lancer le contenu du premier onglet
                     displayTabContent('citoyens');
+
+                    // --- NUKA-COLA TRIGGER ---
+                    setTimeout(() => {
+                        if (Math.random() < 0.5) {
+                            showNukaAd();
+                        }
+                    }, 5000); // 5-second delay
+
                 }, 600); // Match animation duration
             });
 
