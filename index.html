@@ -149,7 +149,7 @@
             pointer-events: none;
         }
 
-        #boot-overlay.glitching {
+        #boot-overlay.glitching, .main-container.glitching {
             animation: glitch-transition 0.6s linear;
         }
 
@@ -591,6 +591,7 @@
     <audio id="audio-mdp-ok" src="mdp-ok.wav" preload="auto"></audio>
     <audio id="audio-mdp-no" src="mdp-no.wav" preload="auto"></audio>
     <audio id="audio-key" src="clavier.wav" preload="auto"></audio>
+    <audio id="audio-button" src="bouton.wav" preload="auto"></audio>
 
     <!--
     /**********************************\
@@ -628,6 +629,15 @@
                 }
             }
             document.addEventListener('keydown', () => playSound('audio-key'));
+
+            // --- EFFET GLITCH ---
+            function triggerGlitchEffect(element) {
+                if (!element) return;
+                element.classList.add('glitching');
+                setTimeout(() => {
+                    element.classList.remove('glitching');
+                }, 600); // Durée de l'animation
+            }
 
             // --- CONTENU TEXTUEL DES ONGLETS ---
             const welcomeLetter = `VAULT-TEC CORPORATION
@@ -992,22 +1002,27 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             // Gérer le clic sur un onglet
             function handleNavClick(e) {
                 const button = e.target.closest('button');
-                if (!button) return;
+                if (!button || button.classList.contains('active')) return;
+
+                triggerGlitchEffect(mainInterface);
+                playSound('audio-button');
 
                 const tabId = button.dataset.tab;
                 const requiredPassword = button.dataset.password;
 
-                if (requiredPassword) {
-                    targetTabAfterPassword = tabId;
-                    passwordInput.value = '';
-                    passwordInput.classList.remove('error');
-                    modal.classList.remove('shake');
-                    modalOverlay.classList.add('visible');
-                    passwordInput.focus();
-                    playSound('audio-protected');
-                } else {
-                    displayTabContent(tabId);
-                }
+                setTimeout(() => {
+                    if (requiredPassword) {
+                        targetTabAfterPassword = tabId;
+                        passwordInput.value = '';
+                        passwordInput.classList.remove('error');
+                        modal.classList.remove('shake');
+                        modalOverlay.classList.add('visible');
+                        passwordInput.focus();
+                        playSound('audio-protected');
+                    } else {
+                        displayTabContent(tabId);
+                    }
+                }, 150);
             }
             
             // --- NUKA-COLA POPUP LOGIC ---
