@@ -110,6 +110,36 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+
+        @keyframes flashing-yellow-static {
+            0%, 100% {
+                background-color: rgba(255, 180, 0, 0.1);
+                color: #ffb400;
+                border-color: #ffb400;
+                box-shadow: 0 0 8px #ffb400 inset;
+            }
+            50% {
+                background-color: #ffb400;
+                color: #000;
+                border-color: #ffb400;
+                box-shadow: 0 0 15px #ffb400;
+            }
+        }
+
+        @keyframes flashing-green {
+            0%, 100% {
+                background-color: var(--color-green-bg);
+                color: var(--color-green-primary);
+                border-color: var(--color-green-primary);
+                box-shadow: 0 0 8px var(--color-green-primary) inset;
+            }
+            50% {
+                background-color: var(--color-green-primary);
+                color: var(--color-black);
+                border-color: var(--color-green-primary);
+                box-shadow: 0 0 15px var(--color-green-primary);
+            }
+        }
         
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -327,6 +357,25 @@
 
         .new-mail-notification {
             animation: flashing-yellow 1s infinite;
+        }
+
+        .flashing-yellow-button {
+            animation: flashing-yellow-static 1.5s infinite;
+        }
+
+        .flashing-green-button {
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            cursor: pointer;
+            text-shadow: inherit;
+            animation: flashing-green 1.5s infinite;
+            border-width: 2px; /* To match other buttons */
+            border-style: solid;
         }
 
         /* --- CONTENT AREA --- */
@@ -723,6 +772,14 @@
 
         .citizen-name {
             font-size: 1.2rem;
+        }
+
+        .citizen-role {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--color-amber-primary);
+            text-shadow: 0 0 5px var(--color-amber-primary);
+            margin-top: 4px;
         }
 
         .citizen-stats {
@@ -1264,6 +1321,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             let currentTab = 'citoyens';
             let typingInterval = null;
             let targetTabAfterPassword = null;
+            let characterRoleToAssign = null;
 
             // --- FONCTIONS ---
 
@@ -1317,6 +1375,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
 
                             const signButton = document.createElement('button');
                             signButton.textContent = 'Signer ici';
+                            signButton.classList.add('flashing-yellow-button');
                             // Appliquer les styles des autres boutons pour la cohérence
                             signButton.style.fontFamily = 'inherit';
                             signButton.style.fontSize = '1rem';
@@ -1353,6 +1412,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
 
                                         biometricButton.addEventListener('click', async () => {
                                             playSound('audio-button');
+                                            characterRoleToAssign = null; // Reset role for normal citizens
 
                                             // Check character limit
                                             try {
@@ -1385,7 +1445,22 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                             textContentElement.appendChild(signatureArea);
                         });
                     } else {
-                        typeWriter(contentData[tabId]);
+                        typeWriter(contentData[tabId], () => {
+                            if (tabId === 'superviseurH' || tabId === 'superviseurA') {
+                                const supervisorButton = document.createElement('button');
+                                supervisorButton.textContent = "Superviseur, merci de vous enregistrer "Enregistrement Biométrique"";
+                                supervisorButton.classList.add('flashing-green-button');
+
+                                supervisorButton.addEventListener('click', () => {
+                                    playSound('audio-button');
+                                    characterRoleToAssign = (tabId === 'superviseurH') ? 'SUPERVISEUR HABITAT' : 'SUPERVISEUR ARCHE';
+                                    initializeSpecialModal();
+                                    specialModalOverlay.classList.add('visible');
+                                });
+
+                                textContentElement.appendChild(supervisorButton);
+                            }
+                        });
                     }
                     textContentElement.style.opacity = '1'; // On affiche le nouveau contenu en fondu
                 }, 500); // On attend la fin de la transition
@@ -1674,8 +1749,12 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     nom: lastname,
                     prenoms: firstname,
                     password: password, // This will be hashed server-side
-                    special: stats
+                    special: stats,
+                    role: characterRoleToAssign // Add the role here
                 };
+
+                // Reset the role after use
+                characterRoleToAssign = null;
 
                 // Call the new online save function
                 saveCharacterOnline(characterData);
@@ -1684,6 +1763,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             specialCancelBtn.addEventListener('click', () => {
                 playSound('audio-button');
                 specialModalOverlay.classList.remove('visible');
+                characterRoleToAssign = null; // Also reset role on cancel
             });
 
 
@@ -1781,10 +1861,15 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
 
                     const entry = document.createElement('div');
                     entry.className = 'citizen-entry';
+
+                    // Conditionally add the role if it exists
+                    const roleHTML = citizen.role ? `<span class="citizen-role">${citizen.role}</span>` : '';
+
                     entry.innerHTML = `
                         <div class="citizen-info">
                             <span class="citizen-name">${citizen.prenoms} ${citizen.nom}</span>
-                            <span class="citizen-stats">Top Stats: ${stats}</span>
+                            ${roleHTML}
+                            <span class="citizen-stats">S.P.E.C.I.A.L: ${stats}</span>
                         </div>
                         <button class="delete-citizen-btn" data-id="${citizen.id}">Supprimer</button>
                     `;
