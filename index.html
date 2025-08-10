@@ -1560,6 +1560,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                             docInfo.style.fontSize = '0.9rem';
 
                             signButton.addEventListener('click', () => {
+                                playSound('audio-page');
                                 textContentElement.style.opacity = '0';
                                 setTimeout(() => {
                                     typeWriter(officialDocument, () => {
