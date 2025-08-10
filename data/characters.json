@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "id": "Perkins-1754861214399",
+    "nom": "Perkins",
+    "prenoms": "Sue",
+    "hashedPassword": "$2a$10$LRiHx8eTAmDWfqPvhxv7luo4C/Fah1RxqfS1ZLAU5mA0V0YvzTSHq",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 3
+      },
+      "P": {
+        "name": "Perception",
+        "value": 5
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 3
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 7
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 2
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 4
+      },
+      "L": {
+        "name": "Chance",
+        "value": 4
+      }
+    },
+    "emails": [
+      {
+        "from": "Vault-Tec Corporation",
+        "body": "Félicitations, Sue Perkins !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
+      }
+    ]
+  }
+]
