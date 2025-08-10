@@ -34,6 +34,7 @@ exports.handler = async function(event, context) {
         prenoms: characterInput.prenoms,
         hashedPassword: hashedPassword,
         special: characterInput.special,
+        role: characterInput.role, // Add role from input
         emails: [
             {
                 from: "Vault-Tec Corporation",
