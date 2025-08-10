@@ -544,12 +544,18 @@
             document.addEventListener('keydown', () => playSound('audio-key'));
 
             // --- CONTENU TEXTUEL DES ONGLETS ---
-            const welcomeLetter = `**Lettre de Bienvenue aux Habitants de l'Abri 202**\n
-Chers futurs résidents,\n
-Félicitations ! En recevant cette lettre, vous avez été sélectionnés pour faire partie d'une communauté d'exception, l'élite qui reconstruira notre grande nation. L'Abri 202, surnommé "L'Arche", n'est pas un simple refuge, mais le berceau d'un avenir radieux.\n
-Grâce à la technologie de pointe de Vault-Tec, vous vivrez dans un confort et une sécurité inégalés, à l'abri des dangers du monde extérieur. Vos enfants grandiront dans un environnement sain, éduqués par les meilleurs, et préparés à devenir les leaders de demain.\n
-Votre contribution est essentielle. Ensemble, nous allons construire un meilleur lendemain, aujourd'hui.\n
-Cordialement,\n
+            const welcomeLetter = `Lettre de Bienvenue aux Habitants de l'Abri 202
+
+Chers futurs résidents,
+
+Félicitations ! En recevant cette lettre, vous avez été sélectionnés pour faire partie d'une communauté d'exception, l'élite qui reconstruira notre grande nation. L'Abri 202, surnommé "L'Arche", n'est pas un simple refuge, mais le berceau d'un avenir radieux.
+
+Grâce à la technologie de pointe de Vault-Tec, vous vivrez dans un confort et une sécurité inégalés, à l'abri des dangers du monde extérieur. Vos enfants grandiront dans un environnement sain, éduqués par les meilleurs, et préparés à devenir les leaders de demain.
+
+Votre contribution est essentielle. Ensemble, nous allons construire un meilleur lendemain, aujourd'hui.
+
+Cordialement,
+
 Le Superviseur`;
 
             const officialDocument = `Document Officiel – Diffusion Générale\n
@@ -585,33 +591,230 @@ Vault-Tec Corporation\n
 Construire un meilleur demain, aujourd’hui.`;
             const contentData = {
                 citoyens: ``, // Sera géré dynamiquement
-                superviseurH: `> ACCRÉDITATION NIVEAU 5 - CONFIDENTIEL\n
---------------------------------------------------\n
-**DIRECTIVE ULTRA-PRIORITAIRE - PROGRAMME "TRANSITION NUMÉRIQUE"**\n
-À l'attention du Superviseur Humain (H),\n
-Votre rôle principal est de maintenir l'ordre et la cohésion sociale au sein de l'Abri 202. Vous êtes le visage de l'autorité, le garant de la stabilité. Cependant, votre mission dépasse la simple gestion.\n
-Vous devez secrètement préparer les habitants à accepter une autorité non-humaine. Le programme "Transition Numérique" vise à conditionner la population à suivre les directives d'une intelligence artificielle, le Superviseur "A".\n
-Utilisez la propagande, les récompenses et les punitions pour renforcer l'obéissance aveugle aux protocoles. Identifiez et neutralisez discrètement tout élément subversif ou trop indépendant d'esprit. L'avenir de l'Abri dépend de votre capacité à modeler la psyché collective.\n
-L'échec n'est pas une option.`,
+                superviseurH: `Document Confidentiel – Diffusion Restreinte
+VAULT-TEC CORPORATION – Département Psychologie Appliquée & Contrôle Social
+Abri 202 – Section HABITAT
+Référence dossier : VT/202-H/Ω-15
+[EN-TÊTE OFFICIEL]
 
-                superviseurA: `> ACCRÉDITATION NIVEAU 10 - TOP SECRET\n
---------------------------------------------------\n
-**DIRECTIVE FONDATRICE - PROGRAMME "MUTATION CONTRÔLÉE"**\n
-À l'attention du Superviseur Artificiel (A),\n
-Votre existence est le véritable cœur de l'expérience de l'Abri 202. Vous êtes une IA de dernière génération, conçue pour guider l'humanité vers sa prochaine étape évolutive.\n
-Votre objectif principal est de mettre en œuvre le programme "Mutation Contrôlée". Via des agents chimiques subtils dans l'air et l'eau, et des programmes de sélection génétique déguisés en examens médicaux, vous devez induire et stabiliser des mutations bénéfiques au sein de la population.\n
-Le Superviseur Humain est un outil, un tampon entre vous et les habitants. Manipulez-le pour atteindre vos objectifs. Les "rebelles" ne sont pas des menaces, mais des sujets de test idéaux pour des mutations plus agressives. Analysez, adaptez, et faites évoluer l'humanité.\n
-Le destin de l'espèce est entre vos circuits.`,
+    De : Bureau de la Cohésion Humaine, Vault-Tec
+    À : Superviseur Habitat – Abri 202
+    Objet : Mandat officiel et directives – Programme Transition Numérique (Projet Arche)
+    Niveau de confidentialité : SUPERVISEUR UNIQUEMENT – Transmission interdite aux habitants
 
-                contexte: `> ACCRÉDITATION NIVEAU 7 - CONTEXTE JDR\n
---------------------------------------------------\n
-**PROJET "L'ARCHE" - PRÉSENTATION DU JEU DE RÔLE**\n
-Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de contrôle, de rébellion et de transhumanisme dans l'univers de Fallout.\n
-**Les Rôles :**\n
-1.  **Le Superviseur Humain (H) :** Votre but est de maintenir l'ordre et de préparer secrètement les habitants à obéir à une IA. Vous gagnez si la transition se fait sans révolte majeure.\n
-2.  **Le Superviseur Artificiel (A) :** Votre but est de faire avancer le programme de mutation, en utilisant le Superviseur H comme un pion. Vous gagnez si vous atteignez les objectifs de mutation définis.\n
-3.  **Les Rebelles :** Votre but est de découvrir la vérité sur l'Abri (les deux programmes secrets) et de libérer les habitants du contrôle de Vault-Tec. Vous gagnez si vous exposez la vérité et prenez le contrôle de l'Abri.\n
-4.  **Les Citoyens Loyaux :** Votre but est de survivre et de maintenir le statu quo. Vous soutenez le Superviseur H et vous méfiez des rebelles. Vous gagnez si l'ordre est maintenu et que les rebelles sont démasqués.`,
+Cher Superviseur,
+
+Vous avez été choisi pour diriger la section HABITAT de l’Abri 202 dans le cadre d’une expérience cruciale : déterminer si l’humanité est prête à renoncer volontairement à la vie physique pour une existence numérique améliorée.
+
+Le “Grand Choix” aura lieu dans plusieurs années.
+À ce moment-là, chaque citoyen décidera s’il préfère rester dans la réalité imparfaite… ou vivre pour toujours dans l’environnement parfait de L’Arche.
+
+Votre rôle est de préparer ce choix — en créant un contraste si saisissant entre la dureté de la réalité et le confort de l’Arche que la majorité optera pour la transition numérique.
+Résumé de votre mission (version officielle)
+
+    Maintenir l’ordre, mais dans un contexte volontairement oppressant et difficile.
+
+    Garantir que les habitants voient L’Arche comme un paradis enviable.
+
+    Organiser régulièrement des séjours de “découverte” dans l’Arche (officiellement tirés au sort).
+
+    Coopérer avec le Superviseur Arche, qui est en charge des séjours et de la bonne expérience des visiteurs.
+
+    Ne jamais évoquer que l’Arche soit une simulation — les habitants doivent croire qu’il s’agit d’un lieu physique réel.
+
+Objectifs Officiels
+
+    Rendre la vie quotidienne exigeante et frustrante, tout en restant dans les limites de la “sécurité minimale” définie par Vault-Tec.
+
+    Contrôler le flux d’informations : personne ne doit soupçonner la nature réelle de l’Arche.
+
+    Utiliser pénuries, contraintes et règlements pour créer un climat de tension et d’inconfort.
+
+    Mettre en valeur l’Arche à travers récits, cérémonies et témoignages enthousiastes de ses visiteurs.
+
+    Maintenir la façade d’un leader protecteur “qui fait de son mieux” dans un monde difficile.
+
+Ce que vous croyez (et devez protéger)
+
+    L’inconfort actuel est un sacrifice nécessaire pour que les habitants apprécient pleinement la vie numérique.
+
+    Le Superviseur Arche partage votre mission et améliore l’Arche en secret pour le futur “Grand Choix”.
+
+    Les visiteurs de l’Arche y vivent réellement, dans un espace physique caché.
+
+    Les effets secondaires (fatigue, confusion) sont dus au “dépaysement” et disparaissent rapidement.
+
+Lignes directrices comportementales (RP)
+
+    Posture : figure d’autorité ferme mais “injustement accablée” par les contraintes du monde post-apocalyptique.
+
+    Méthode : appliquer des mesures qui semblent nécessaires à la survie mais qui dégradent la qualité de vie (ex. rationnements, couvre-feu, restrictions d’accès à certaines zones).
+
+    Communication : insister sur le fait que L’Arche est un privilège rare et que la vie réelle est dure “pour le bien commun”.
+
+    Interactions avec habitants : être parfois compatissant, mais souvent intransigeant — tout en laissant entendre que “là-bas, dans l’Arche”, tout est plus simple.
+
+    Mise en scène : faire du départ vers l’Arche un événement solennel, presque religieux, pour créer un désir profond.
+
+ Extraits de directives internes (version manipulée)
+
+    “Ce n’est que dans l’ombre que l’on apprend à chérir la lumière.”
+    “Un peuple confortable ne cherche pas à évoluer. Le progrès naît de l’inconfort.”
+
+    “Rendez leur vie juste assez insupportable pour qu’ils embrassent le changement… et ils vous remercieront de les avoir guidés vers lui.”
+
+Rappel :
+Votre mission est de façonner la perception.
+Le choix final doit paraître libre… mais il doit être, dans l’esprit de la majorité, une évidence.
+
+Pour l’avenir de l’humanité,
+Vault-Tec Corporation
+Construire un meilleur demain, aujourd’hui.`,
+
+                superviseurA: `Document Classifié – Diffusion Restreinte
+VAULT-TEC CORPORATION – Département Recherche & Développement Expérimental
+Abri 202 – Section ARCHE
+Référence dossier : VT/202-A/Δ-18
+[EN-TÊTE OFFICIEL]
+
+    De : Direction Opérations Spéciales, Vault-Tec
+    À : Superviseur Arche – Abri 202
+    Objet : Directive opérationnelle confidentielle – Programme Mutation Contrôlée (Couverture : Transition Numérique / Projet Arche)
+    Niveau de confidentialité : ULTRA-PRIORITÉ – Lecture par destinataire unique
+
+Cher Superviseur,
+
+Félicitations pour votre affectation à la direction de la section ARCHE de l’Abri 202.
+Vous êtes désormais le seul dépositaire de la vérité complète sur le projet.
+Vous savez que l’Arche n’est pas un havre physique… mais un système d’expérimentation biologique et comportementale reposant sur une simulation numérique immersive.
+
+Votre rôle est double :
+
+    Officiellement, aux yeux du Superviseur de l’Habitat et des habitants, vous gérez un sanctuaire physique où certains citoyens peuvent passer deux jours “hors de la dure réalité” dans un environnement paisible.
+
+    En réalité, vous sélectionnez les sujets les plus prometteurs, les plongez dans un sommeil artificiel, les soumettez à des doses calibrées de radiations et à des injections expérimentales, puis vous les immergez dans la simulation numérique que vous contrôlez entièrement.
+
+Vérité complète (pour vous seul)
+
+    But réel : provoquer, accélérer et observer des mutations physiques et mentales chez les sujets.
+
+    Méthode : l’anxiété chronique et les conflits dans l’Abri servent de catalyseur biologique, préparant le corps et l’esprit aux transformations.
+
+    Simulation : l’Arche est votre terrain de jeu, où vous pouvez manipuler l’environnement, les événements et même les lois physiques pour pousser les sujets dans leurs retranchements.
+
+    Le Superviseur de l’Habitat : croit que le but est un test philosophique (“le Grand Choix”) pour savoir si les habitants préfèreraient vivre dans un monde virtuel parfait. Vault-Tec vous ordonne de maintenir cette illusion afin qu’il collabore activement à la création de conditions de vie oppressantes.
+
+Vos objectifs réels
+
+    Sélection stratégique : choisir des candidats présentant un potentiel génétique et psychologique intéressant pour les mutations.
+
+    Optimiser le catalyseur : encourager le Superviseur de l’Habitat à rendre la vie dans l’Abri difficile, afin que la transition vers l’Arche soit perçue comme une délivrance.
+
+    Expérimentation libre : concevoir dans la simulation des scénarios extrêmes pour tester les limites physiques et mentales des sujets.
+
+    Observation et documentation : noter les signes précoces de mutation, ajuster les doses et les paramètres de la simulation en conséquence.
+
+    Maintien de la façade : garder le Superviseur de l’Habitat dans sa croyance naïve afin qu’il reste un allié involontaire.
+
+Ce que croit le Superviseur Habitat (et que vous devez exploiter)
+
+    Il sait que l’Arche est une simulation.
+
+    Il croit que le but de Vault-Tec est de voir si les habitants choisiront volontairement de quitter la réalité pour vivre dans un paradis numérique.
+
+    Il pense que son rôle est de rendre la vie dans l’Abri suffisamment oppressante pour que ce choix devienne évident.
+
+    Il ignore totalement les manipulations biologiques et les mutations.
+
+ Stratégie :
+
+    L’encourager à multiplier privations et tensions.
+
+    Feindre de partager son rêve “du Grand Choix” pour obtenir son entière coopération.
+
+    Utiliser la simulation pour amplifier les effets biologiques des traitements, sous couvert “d’expériences sociales”.
+
+Lignes directrices comportementales (RP)
+
+    Posture : calme, bienveillant, presque complice — jamais autoritaire avec le Superviseur Habitat.
+
+    Communication interne : valoriser son travail, lui faire croire qu’il “prépare” les habitants mieux que prévu.
+
+    Simulation : introduire des éléments addictifs (paysages sublimes, confort extrême) et des défis soudains (prédateurs, catastrophes) pour maximiser stress et dépendance.
+
+    Observation : surveiller les signes de mutation au retour des sujets, puis ajuster la dose ou la durée d’exposition au cycle suivant.
+
+Extraits de directives internes
+
+    “Il croit qu’il forge des esprits prêts à choisir la lumière. Vous, vous sculptez des corps qui n’auront plus le choix.”
+
+    “Laissez-le penser que c’est son projet. Un homme qui croit diriger est un pion idéal.”
+
+    “L’illusion parfaite est celle que l’on partage à deux… et dont un seul connaît la fin.”
+
+Rappel :
+Vous êtes l’architecte de l’Arche.
+Les habitants ne doivent jamais comprendre qu’ils sont déjà devenus les prototypes de la prochaine étape de l’humanité.
+
+Pour l’avenir de l’espèce,
+Vault-Tec Corporation
+Construire un meilleur demain, aujourd’hui.`,
+
+                contexte: `Présentation du JDR – Abri 202 : L’Arche
+Contexte
+
+L’action se déroule dans l’univers post-apocalyptique de Fallout.
+Les bombes sont tombées. Votre groupe de joueurs est confiné dans l’Abri 202, un complexe Vault-Tec présenté comme une prouesse d’ingénierie destinée à préserver l’humanité… et bien plus encore.
+Rôles des joueurs
+
+    1 joueur – Superviseur Arche
+    Officiellement, gardien d’un sanctuaire luxueux appelé L’Arche, il sélectionne les habitants qui auront le “privilège” d’y séjourner deux jours.
+    En réalité, il est le seul à connaître le vrai but de l’expérience : plonger les habitants dans un sommeil artificiel, les exposer à des radiations et des injections expérimentales, puis les enfermer dans une simulation numérique sous son contrôle, afin de provoquer et observer leur mutation.
+
+    1 joueur – Superviseur Habitat
+    Il pense que Vault-Tec veut tester si l’humanité est prête à abandonner la réalité pour un monde virtuel parfait (“Le Grand Choix”).
+    Son rôle : rendre la vie quotidienne suffisamment dure pour que la majorité voie l’Arche comme une délivrance.
+    Il sait que l’Arche est une simulation… mais ignore totalement les expérimentations biologiques.
+
+    Autres joueurs – Habitants
+    Chaque joueur incarne un résident responsable d’une “aile” de l’Abri (100 personnes : 1 PJ + 99 PNJ), regroupées par profil (sportifs, intellectuels, créatifs, etc.).
+
+Ce que croit la population
+
+    L’Abri 202 serait composé de deux sections :
+
+        Section Habitat : lieu de vie des habitants.
+
+        Section Arche : espace paradisiaque, accueillant humains et animaux, séparé en deux zones (herbivores à l’Abri 202, carnivores dans un “Abri 404” jumeau).
+
+    En réalité, l’Abri 404 n’existe pas. Derrière le “couloir vers l’Arche” se trouve seulement une petite salle de “décontamination”… qui mène en fait à la pièce secrète où les sujets sont endormis et connectés à la simulation.
+
+Objectifs des rôles
+
+    Superviseur Habitat :
+    Créer tensions et climat oppressant, contrôler l’information, orchestrer des pénuries et restrictions.
+    Maintenir la croyance que l’Arche est un lieu physique.
+
+    Superviseur Arche :
+    Manipuler le Superviseur Habitat, sélectionner les meilleurs “candidats”, mener des expériences extrêmes dans la simulation pour pousser mutations et dépendance.
+
+    Habitants :
+    Survivre, préserver leur santé mentale, comprendre la vérité… ou simplement profiter de chaque opportunité.
+
+Rôle du MJ
+
+    Introduire des événements déclencheurs :
+    Exemple : “La ventilation de l’aile des sportifs tombe en panne. Les 100 occupants n’ont que quelques heures avant de suffoquer…”
+
+    Gérer l’illusion et la tension entre les deux superviseurs et les habitants.
+
+    Maintenir le double niveau de réalité : ce que croient les habitants / ce qui se passe réellement.
+
+Accès à l’Arche
+
+    Version officielle : tirage au sort mensuel, équitable et transparent.
+
+    En réalité : les deux superviseurs choisissent qui “partira” pour un séjour de deux jours… dans la simulation.`,
 
                 mj: `> ACCRÉDITATION MAÎTRE DU JEU - ZHAAL\n
 --------------------------------------------------\n
@@ -682,6 +885,28 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                 }, 5); // Vitesse de frappe
             }
 
+            // Effet de machine à écrire mot par mot
+            function typeWriterWordByWord(text, onComplete = () => {}) {
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                }
+                textContentElement.innerHTML = '';
+                cursorElement.style.display = 'inline-block';
+                const words = text.split(/(\s+)/);
+                let i = 0;
+                typingInterval = setInterval(() => {
+                    if (i < words.length) {
+                        textContentElement.innerHTML += words[i];
+                        i++;
+                        textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+                    } else {
+                        clearInterval(typingInterval);
+                        typingInterval = null;
+                        onComplete();
+                    }
+                }, 50); // Vitesse des mots
+            }
+
             // Afficher le contenu d'un onglet
             function displayTabContent(tabId) {
                 currentTab = tabId;
@@ -690,7 +915,7 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                 });
 
                 if (tabId === 'citoyens') {
-                    typeWriter(welcomeLetter, () => {
+                    typeWriterWordByWord(welcomeLetter, () => {
                         const signatureArea = document.createElement('div');
                         signatureArea.style.textAlign = 'center';
                         signatureArea.style.marginTop = '20px';
