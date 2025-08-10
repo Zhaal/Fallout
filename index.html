@@ -606,6 +606,8 @@
             padding: 10px;
             background: var(--bg-color);
             text-align: left;
+            height: 290px; /* Fixed height */
+            overflow-y: auto; /* Add scrollbar if content overflows */
         }
 
         .special-description h4 {
@@ -663,7 +665,7 @@
             text-align: center;
         }
 
-        #special-confirm-btn {
+        #special-confirm-btn, #special-cancel-btn {
             font-family: inherit;
             font-size: 1.2rem;
             padding: 10px 20px;
@@ -673,9 +675,16 @@
             cursor: pointer;
             margin-top: 10px;
             text-shadow: none;
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
-        #special-confirm-btn:hover {
+        #special-cancel-btn {
+            background: transparent;
+            color: var(--primary-color);
+        }
+
+        #special-confirm-btn:hover, #special-cancel-btn:hover {
             background: var(--dark-color);
             color: var(--primary-color);
         }
@@ -844,6 +853,7 @@
                 </div>
             </div>
 
+            <button id="special-cancel-btn" type="button">Annuler</button>
             <button id="special-confirm-btn">Valider la création</button>
         </div>
     </div>
@@ -906,6 +916,7 @@
 
             const specialModalOverlay = document.getElementById('special-modal-overlay');
             const specialConfirmBtn = document.getElementById('special-confirm-btn');
+            const specialCancelBtn = document.getElementById('special-cancel-btn');
             const specialStatsContainer = document.querySelector('.special-stats');
             const pointsToSpendEl = document.getElementById('points-to-spend');
 
@@ -1594,6 +1605,11 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 saveCharacterOnline(characterData);
             });
 
+            specialCancelBtn.addEventListener('click', () => {
+                playSound('audio-button');
+                specialModalOverlay.classList.remove('visible');
+            });
+
 
             // --- LOGIQUE MESSAGERIE ---
 
@@ -1653,6 +1669,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             }
 
             async function showRegisteredCitizens() {
+                playSound('audio-button');
                 citizensModalOverlay.classList.add('visible');
                 citizensListContainer.innerHTML = '<p>Chargement...</p>';
 
@@ -1707,6 +1724,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             navBar.addEventListener('click', handleNavClick);
             registeredCitizensBtn.addEventListener('click', showRegisteredCitizens);
             mailBtn.addEventListener('click', () => {
+                playSound('audio-button');
                 mailModalOverlay.classList.add('visible');
                 showMailLogin();
             });
@@ -1724,6 +1742,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 }
             });
             closeCitizensModalBtn.addEventListener('click', () => {
+                playSound('audio-button');
                 citizensModalOverlay.classList.remove('visible');
             });
 
@@ -1736,6 +1755,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             mailModal.addEventListener('click', async (e) => {
                 // Use delegation for buttons inside the dynamic content
                 if (e.target.id === 'close-mail-modal-btn') {
+                    playSound('audio-button');
                     mailModalOverlay.classList.remove('visible');
                 }
             });
@@ -1779,6 +1799,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             citizensListContainer.addEventListener('click', async (e) => {
                 if (!e.target.classList.contains('delete-citizen-btn')) return;
 
+                playSound('audio-button');
                 const btn = e.target;
                 const characterId = btn.dataset.id;
                 const password = prompt(`Veuillez entrer le mot de passe pour supprimer ce personnage :`);
