@@ -42,6 +42,22 @@ function soundFX(type='open'){
   }catch(e){}
 }
 
+const audio = {
+  connect: new Audio('Connect-pipboy.wav'),
+  modal: new Audio('accès-protégé.wav'),
+  amberOn: new Audio('ambre-on.wav'),
+  amberOff: new Audio('ambre-off.wav'),
+  mdpOk: new Audio('mdp-ok.wav'),
+  mdpNo: new Audio('mdp-no.wav')
+};
+function play(name){
+  const a = audio[name];
+  if(a){
+    a.currentTime = 0;
+    a.play().catch(()=>{});
+  }
+}
+
 function setupTabs(){
   const passModal = qs('#passModal');
   const passInput = qs('#passInput');
@@ -88,6 +104,7 @@ function setupTabs(){
       modalTarget.textContent = btn.textContent;
       passInput.value = '';
       passModal.showModal();
+      play('modal');
 
       passModal.addEventListener('close', function handler(){
         passModal.removeEventListener('close', handler);
@@ -95,10 +112,10 @@ function setupTabs(){
           const entered = passInput.value.trim();
           if(entered === pass){
             grantAccess(key);
-            soundFX('ok');
+            play('mdpOk');
             showPane(id);
           }else{
-            soundFX('deny');
+            play('mdpNo');
             passModal.querySelector('.modal-card').animate(
               [{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],
               {duration:180, iterations:1}
@@ -162,22 +179,30 @@ function setupTheme(){
     const theme = toggle.checked ? 'amber' : 'green';
     root.setAttribute('data-theme', theme);
     localStorage.setItem('vt.theme', theme);
-    soundFX('open');
+    play(theme === 'amber' ? 'amberOn' : 'amberOff');
   });
 
   document.addEventListener('keydown', (e)=>{
-    if(e.key.toLowerCase()==='g'){ root.setAttribute('data-theme','green'); if(toggle) toggle.checked=false; localStorage.setItem('vt.theme','green'); soundFX('open'); }
-    if(e.key.toLowerCase()==='a'){ root.setAttribute('data-theme','amber'); if(toggle) toggle.checked=true;  localStorage.setItem('vt.theme','amber'); soundFX('open'); }
+    if(e.key.toLowerCase()==='g'){ root.setAttribute('data-theme','green'); if(toggle) toggle.checked=false; localStorage.setItem('vt.theme','green'); play('amberOff'); }
+    if(e.key.toLowerCase()==='a'){ root.setAttribute('data-theme','amber'); if(toggle) toggle.checked=true;  localStorage.setItem('vt.theme','amber'); play('amberOn'); }
   });
+}
+
+function initApp(){
+  clock();
+  loadPayloads();
+  setupTabs();
+  typeInEffect();
+  keyboardShortcuts();
 }
 
 // Init
 window.addEventListener('DOMContentLoaded', ()=>{
-  clock();
-  loadPayloads();
   setupTheme();
-  setupTabs();
-  typeInEffect();
-  keyboardShortcuts();
-  soundFX('open'); // boot
+  qs('#connectBtn')?.addEventListener('click', ()=>{
+    play('connect');
+    qs('#landing')?.classList.add('hidden');
+    qs('#app')?.classList.remove('hidden');
+    initApp();
+  });
 });
