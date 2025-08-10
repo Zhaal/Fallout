@@ -211,3 +211,8 @@ body.terminal-mode{
   filter: contrast(1.15) saturate(1.25) brightness(1.05);
 }
 body.terminal-mode .crt{ opacity:.45 }
+
+/* Pre-home overlay */
+.pre-home{ position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; text-align:center; z-index:2001; flex-direction:column; padding:20px; }
+.pre-home .slogan{ color:var(--accent); margin:6px 0 16px; }
+.pre-home.is-hidden{ display:none; }
