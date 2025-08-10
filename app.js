@@ -171,20 +171,36 @@ function keyboardShortcuts(){
 function setupTheme(){
   const root = document.documentElement;
   const toggle = qs('#themeToggle');
-  const saved = localStorage.getItem('vt.theme') || 'green';
+  let saved = 'green';
+  try {
+    saved = localStorage.getItem('vt.theme') || 'green';
+  } catch (e) {
+    // storage unavailable
+  }
   root.setAttribute('data-theme', saved);
   if(saved === 'amber' && toggle) toggle.checked = true;
 
   toggle?.addEventListener('change', ()=>{
     const theme = toggle.checked ? 'amber' : 'green';
     root.setAttribute('data-theme', theme);
-    localStorage.setItem('vt.theme', theme);
+    try { localStorage.setItem('vt.theme', theme); } catch (e) {}
     play(theme === 'amber' ? 'amberOn' : 'amberOff');
   });
 
   document.addEventListener('keydown', (e)=>{
-    if(e.key.toLowerCase()==='g'){ root.setAttribute('data-theme','green'); if(toggle) toggle.checked=false; localStorage.setItem('vt.theme','green'); play('amberOff'); }
-    if(e.key.toLowerCase()==='a'){ root.setAttribute('data-theme','amber'); if(toggle) toggle.checked=true;  localStorage.setItem('vt.theme','amber'); play('amberOn'); }
+    const k = e.key.toLowerCase();
+    if(k==='g'){
+      root.setAttribute('data-theme','green');
+      if(toggle) toggle.checked=false;
+      try { localStorage.setItem('vt.theme','green'); } catch (e) {}
+      play('amberOff');
+    }
+    if(k==='a'){
+      root.setAttribute('data-theme','amber');
+      if(toggle) toggle.checked=true;
+      try { localStorage.setItem('vt.theme','amber'); } catch (e) {}
+      play('amberOn');
+    }
   });
 }
 
@@ -198,7 +214,7 @@ function initApp(){
 
 // Init
 window.addEventListener('DOMContentLoaded', ()=>{
-  setupTheme();
+  try { setupTheme(); } catch (e) {}
   qs('#connectBtn')?.addEventListener('click', ()=>{
     play('connect');
     initApp();
