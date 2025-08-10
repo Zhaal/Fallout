@@ -40,5 +40,48 @@
         "body": "Félicitations, Sue Perkins !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
+  },
+  {
+    "id": "Zhaal-1754868730332",
+    "nom": "Zhaal",
+    "prenoms": "Upsi",
+    "hashedPassword": "$2a$10$bCD66a89qIG21nAf073lpOTvbmluCpfJSqU71FYBNpKn7koBsWFUm",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 4
+      },
+      "P": {
+        "name": "Perception",
+        "value": 4
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 2
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 3
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 5
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 5
+      },
+      "L": {
+        "name": "Chance",
+        "value": 5
+      }
+    },
+    "role": null,
+    "emails": [
+      {
+        "from": "Vault-Tec Corporation",
+        "body": "Félicitations, Upsi Zhaal !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
+      }
+    ]
   }
 ]
