@@ -7,12 +7,12 @@ const DATA_FILE_PATH = "data/characters.json";
 
 exports.handler = async function(event, context) {
     if (event.httpMethod !== "POST") {
-        return { statusCode: 405, body: "Method Not Allowed" };
+        return { statusCode: 405, body: JSON.stringify({ error: "Method Not Allowed" }) };
     }
 
     const { GITHUB_TOKEN } = process.env;
     if (!GITHUB_TOKEN) {
-        return { statusCode: 500, body: "GitHub token is not configured." };
+        return { statusCode: 500, body: JSON.stringify({ error: "GitHub token is not configured." }) };
     }
 
     const octokit = new Octokit({ auth: GITHUB_TOKEN });

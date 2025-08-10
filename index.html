@@ -1389,6 +1389,10 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             });
 
             async function saveCharacterOnline(characterData) {
+                const btn = document.getElementById('special-confirm-btn');
+                btn.disabled = true;
+                btn.textContent = 'Sauvegarde en cours...';
+
                 try {
                     const response = await fetch('/.netlify/functions/save-character', {
                         method: 'POST',
@@ -1399,8 +1403,16 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     });
 
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || `Erreur du serveur: ${response.status}`);
+                        // Try to parse error response as JSON, but fall back to text
+                        let errorMessage;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.error || `Erreur du serveur: ${response.status}`;
+                        } else {
+                            errorMessage = await response.text();
+                        }
+                        throw new Error(errorMessage);
                     }
 
                     const result = await response.json();
@@ -1411,9 +1423,12 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
 
                 } catch (error) {
                     console.error('Erreur lors de la sauvegarde:', error);
-                    alert(`Échec de la sauvegarde en ligne. Erreur: ${error.message}. Les données seront téléchargées localement.`);
+                    alert(`Échec de la sauvegarde en ligne. Erreur: ${error.message}\n\nLes données seront téléchargées localement comme solution de secours.`);
                     // Fallback to local download
                     saveCharacterToFile(characterData);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Valider la création';
                 }
             }
 
