@@ -135,15 +135,22 @@ function setupTabs(){
 function typeInEffect(){
   const pane = qs('.pane.is-visible pre');
   if(!pane) return;
-  const lines = pane.textContent.split('\n');
+  const mode = pane.dataset.mode || 'lines';
+  const src = pane.textContent;
   pane.textContent = '';
+  let parts;
+  if(mode === 'sentences'){
+    parts = src.match(/[^.!?\n]+[.!?\n]*/g) || [];
+  }else{
+    parts = src.split('\n');
+  }
   let i = 0;
   pane.style.setProperty('--pip-cursor', '" "');
   const step = () => {
-    pane.textContent += lines[i];
-    if(i < lines.length - 1) pane.textContent += '\n';
+    pane.textContent += parts[i];
+    if(mode !== 'sentences' && i < parts.length - 1) pane.textContent += '\n';
     i++;
-    if(i < lines.length){
+    if(i < parts.length){
       setTimeout(step, 150);
     }else{
       pane.style.setProperty('--pip-cursor', '"▮"');
