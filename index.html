@@ -310,6 +310,25 @@
             box-shadow: 0 0 8px var(--primary-color) inset;
         }
 
+        @keyframes flashing-yellow {
+            0%, 100% {
+                background-color: var(--color-amber-bg);
+                color: var(--color-amber-primary);
+                border-color: var(--color-amber-primary);
+                box-shadow: 0 0 8px var(--color-amber-primary) inset;
+            }
+            50% {
+                background-color: var(--color-amber-primary);
+                color: var(--color-black);
+                border-color: var(--color-amber-primary);
+                box-shadow: 0 0 15px var(--color-amber-primary);
+            }
+        }
+
+        .new-mail-notification {
+            animation: flashing-yellow 1s infinite;
+        }
+
         /* --- CONTENT AREA --- */
         .content-area {
             flex-grow: 1;
@@ -549,8 +568,23 @@
             font-size: 1rem;
         }
 
-        .character-identity input::placeholder {
+        .character-identity input::placeholder,
+        .character-password input::placeholder {
             color: var(--dark-color);
+        }
+
+        .character-password {
+            margin-bottom: 20px;
+        }
+
+        .character-password input {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-color);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            font-family: inherit;
+            font-size: 1rem;
         }
 
         .special-container {
@@ -646,6 +680,46 @@
             color: var(--primary-color);
         }
 
+        /* --- STYLES MODAL CITOYENS --- */
+        #citizens-modal {
+            max-width: 700px;
+        }
+
+        #citizens-list-container {
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--dark-color);
+            padding: 10px;
+            margin-bottom: 20px;
+            background: var(--bg-color);
+        }
+
+        .citizen-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid var(--dark-color);
+        }
+
+        .citizen-entry:last-child {
+            border-bottom: none;
+        }
+
+        .citizen-name {
+            font-size: 1.2rem;
+        }
+
+        .delete-citizen-btn {
+            background: #ff0000;
+            color: #fff;
+            border: 1px solid #ff0000;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -704,6 +778,8 @@
             <button data-tab="superviseurA" data-password="mutation">Superviseur A</button>
             <button data-tab="contexte" data-password="mutation">Contexte</button>
             <button data-tab="mj" data-password="zhaal">MJ</button>
+            <button id="mail-btn">Mail</button>
+            <button id="registered-citizens-btn">Citoyen enregistré</button>
         </nav>
 
         <!-- ZONE DE CONTENU -->
@@ -755,6 +831,9 @@
                 <input type="text" id="character-lastname" placeholder="Nom..." autocomplete="off">
                 <input type="text" id="character-firstname" placeholder="Prénoms..." autocomplete="off">
             </div>
+            <div class="character-password">
+                <input type="password" id="character-password" placeholder="Mot de passe..." autocomplete="off">
+            </div>
 
             <div class="special-container">
                 <div class="special-stats">
@@ -766,6 +845,25 @@
             </div>
 
             <button id="special-confirm-btn">Valider la création</button>
+        </div>
+    </div>
+
+    <!-- MODAL CITOYENS ENREGISTRÉS -->
+    <div class="modal-overlay" id="citizens-modal-overlay">
+        <div id="citizens-modal" class="modal">
+            <h2>Citoyens Enregistrés</h2>
+            <div id="citizens-list-container">
+                <!-- La liste des citoyens sera injectée ici par JS -->
+                <p>Chargement...</p>
+            </div>
+            <button id="close-citizens-modal-btn">Fermer</button>
+        </div>
+    </div>
+
+    <!-- MODAL MAIL -->
+    <div class="modal-overlay" id="mail-modal-overlay">
+        <div id="mail-modal" class="modal">
+            <!-- Contenu dynamique : login ou inbox -->
         </div>
     </div>
 
@@ -810,6 +908,15 @@
             const specialConfirmBtn = document.getElementById('special-confirm-btn');
             const specialStatsContainer = document.querySelector('.special-stats');
             const pointsToSpendEl = document.getElementById('points-to-spend');
+
+            const citizensModalOverlay = document.getElementById('citizens-modal-overlay');
+            const citizensListContainer = document.getElementById('citizens-list-container');
+            const registeredCitizensBtn = document.getElementById('registered-citizens-btn');
+            const closeCitizensModalBtn = document.getElementById('close-citizens-modal-btn');
+
+            const mailBtn = document.getElementById('mail-btn');
+            const mailModalOverlay = document.getElementById('mail-modal-overlay');
+            const mailModal = document.getElementById('mail-modal');
 
 
             // --- FONCTION SON ---
@@ -1389,6 +1496,10 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             });
 
             async function saveCharacterOnline(characterData) {
+                const btn = document.getElementById('special-confirm-btn');
+                btn.disabled = true;
+                btn.textContent = 'Sauvegarde en cours...';
+
                 try {
                     const response = await fetch('/.netlify/functions/save-character', {
                         method: 'POST',
@@ -1399,8 +1510,16 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     });
 
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || `Erreur du serveur: ${response.status}`);
+                        // Try to parse error response as JSON, but fall back to text
+                        let errorMessage;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.error || `Erreur du serveur: ${response.status}`;
+                        } else {
+                            errorMessage = await response.text();
+                        }
+                        throw new Error(errorMessage);
                     }
 
                     const result = await response.json();
@@ -1409,11 +1528,21 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     specialModalOverlay.classList.remove('visible');
                     playSound('audio-mdp-ok');
 
+                    // Trigger mail notification
+                    const mailBtn = document.getElementById('mail-btn');
+                    mailBtn.classList.add('new-mail-notification');
+                    setTimeout(() => {
+                        mailBtn.classList.remove('new-mail-notification');
+                    }, 10000); // Notification lasts for 10 seconds
+
                 } catch (error) {
                     console.error('Erreur lors de la sauvegarde:', error);
-                    alert(`Échec de la sauvegarde en ligne. Erreur: ${error.message}. Les données seront téléchargées localement.`);
+                    alert(`Échec de la sauvegarde en ligne. Erreur: ${error.message}\n\nLes données seront téléchargées localement comme solution de secours.`);
                     // Fallback to local download
                     saveCharacterToFile(characterData);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Valider la création';
                 }
             }
 
@@ -1437,9 +1566,15 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             specialConfirmBtn.addEventListener('click', () => {
                 const lastname = characterLastnameInput.value.trim();
                 const firstname = characterFirstnameInput.value.trim();
+                const password = document.getElementById('character-password').value;
 
                 if (!lastname || !firstname) {
                     alert('Veuillez renseigner le nom et les prénoms.');
+                    return;
+                }
+
+                if (!password) {
+                    alert('Le mot de passe est obligatoire.');
                     return;
                 }
 
@@ -1451,12 +1586,88 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 const characterData = {
                     nom: lastname,
                     prenoms: firstname,
+                    password: password, // This will be hashed server-side
                     special: stats
                 };
 
                 // Call the new online save function
                 saveCharacterOnline(characterData);
             });
+
+
+            // --- LOGIQUE MESSAGERIE ---
+
+            let loggedInCharacter = null;
+
+            function showMailLogin() {
+                loggedInCharacter = null;
+                mailModal.innerHTML = `
+                    <h2>Messagerie Privée</h2>
+                    <form id="mail-login-form">
+                        <input type="text" id="mail-login-name" placeholder="Nom du personnage..." required>
+                        <input type="password" id="mail-login-password" placeholder="Mot de passe..." required>
+                        <button type="submit">Connexion</button>
+                        <button type="button" id="close-mail-modal-btn">Fermer</button>
+                    </form>
+                `;
+            }
+
+            function showInbox(character) {
+                loggedInCharacter = character;
+                let emailsHTML = '<p>Boîte de réception vide.</p>';
+                if (character.emails && character.emails.length > 0) {
+                    emailsHTML = character.emails.map(email => `
+                        <div class="email-item">
+                            <h4>De : ${email.from}</h4>
+                            <p>${email.body}</p>
+                        </div>
+                    `).join('');
+                }
+
+                mailModal.innerHTML = `
+                    <h2>Boîte de réception de ${character.prenoms} ${character.nom}</h2>
+                    <div class="inbox-container">${emailsHTML}</div>
+                    <button type="button" id="close-mail-modal-btn">Fermer</button>
+                `;
+            }
+
+
+            // --- LOGIQUE CITOYENS ENREGISTRÉS ---
+
+            function renderCitizensList(citizens) {
+                citizensListContainer.innerHTML = ''; // Clear previous content
+                if (citizens.length === 0) {
+                    citizensListContainer.innerHTML = '<p>Aucun citoyen enregistré pour le moment.</p>';
+                    return;
+                }
+
+                citizens.forEach(citizen => {
+                    const entry = document.createElement('div');
+                    entry.className = 'citizen-entry';
+                    entry.innerHTML = `
+                        <span class="citizen-name">${citizen.prenoms} ${citizen.nom}</span>
+                        <button class="delete-citizen-btn" data-id="${citizen.id}">Supprimer</button>
+                    `;
+                    citizensListContainer.appendChild(entry);
+                });
+            }
+
+            async function showRegisteredCitizens() {
+                citizensModalOverlay.classList.add('visible');
+                citizensListContainer.innerHTML = '<p>Chargement...</p>';
+
+                try {
+                    const response = await fetch('/.netlify/functions/get-characters');
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Erreur serveur');
+                    }
+                    const citizens = await response.json();
+                    renderCitizensList(citizens);
+                } catch (error) {
+                    citizensListContainer.innerHTML = `<p style="color: var(--color-error);">Erreur: ${error.message}</p>`;
+                }
+            }
 
 
             // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
@@ -1494,6 +1705,11 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             
             // Navigation
             navBar.addEventListener('click', handleNavClick);
+            registeredCitizensBtn.addEventListener('click', showRegisteredCitizens);
+            mailBtn.addEventListener('click', () => {
+                mailModalOverlay.classList.add('visible');
+                showMailLogin();
+            });
             
             // Modal
             passwordForm.addEventListener('submit', handlePasswordSubmit);
@@ -1505,6 +1721,96 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 if (e.target === modalOverlay) {
                     modalOverlay.classList.remove('visible');
                     targetTabAfterPassword = null;
+                }
+            });
+            closeCitizensModalBtn.addEventListener('click', () => {
+                citizensModalOverlay.classList.remove('visible');
+            });
+
+            mailModalOverlay.addEventListener('click', (e) => {
+                if (e.target === mailModalOverlay) {
+                    mailModalOverlay.classList.remove('visible');
+                }
+            });
+
+            mailModal.addEventListener('click', async (e) => {
+                // Use delegation for buttons inside the dynamic content
+                if (e.target.id === 'close-mail-modal-btn') {
+                    mailModalOverlay.classList.remove('visible');
+                }
+            });
+
+            mailModal.addEventListener('submit', async (e) => {
+                if (e.target.id !== 'mail-login-form') return;
+                e.preventDefault();
+
+                const form = e.target;
+                const nameInput = form.querySelector('#mail-login-name');
+                const passwordInput = form.querySelector('#mail-login-password');
+                const submitBtn = form.querySelector('button[type="submit"]');
+
+                const nom = nameInput.value;
+                const password = passwordInput.value;
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = '...';
+
+                try {
+                    const response = await fetch('/.netlify/functions/login-character', {
+                        method: 'POST',
+                        body: JSON.stringify({ nom, password }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Erreur inconnue.');
+                    }
+
+                    showInbox(result); // Show the inbox with the returned character data
+
+                } catch (error) {
+                    alert(`Échec de la connexion : ${error.message}`);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Connexion';
+                }
+            });
+
+            citizensListContainer.addEventListener('click', async (e) => {
+                if (!e.target.classList.contains('delete-citizen-btn')) return;
+
+                const btn = e.target;
+                const characterId = btn.dataset.id;
+                const password = prompt(`Veuillez entrer le mot de passe pour supprimer ce personnage :`);
+
+                if (password === null) return; // User cancelled the prompt
+                if (!password) {
+                    alert('Le mot de passe est requis pour la suppression.');
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = '...';
+
+                try {
+                    const response = await fetch('/.netlify/functions/delete-character', {
+                        method: 'POST',
+                        body: JSON.stringify({ id: characterId, password: password }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Erreur inconnue.');
+                    }
+
+                    alert(result.message);
+                    await showRegisteredCitizens(); // Refresh the list
+
+                } catch (error) {
+                    alert(`Erreur lors de la suppression : ${error.message}`);
+                    btn.disabled = false;
+                    btn.textContent = 'Supprimer';
                 }
             });
 
