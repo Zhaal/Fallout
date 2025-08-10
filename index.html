@@ -809,6 +809,164 @@
             margin-top: 15px;
         }
 
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            body {
+                font-size: 22px;
+            }
+            .main-container {
+                width: 100%;
+                height: 100%;
+                max-height: none;
+                border: none;
+                padding: 10px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .system-status {
+                align-self: flex-start;
+                text-align: left;
+            }
+            .nav-bar {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+            .nav-bar button {
+                font-size: 1rem;
+                padding: 4px 10px;
+            }
+            .modal {
+                width: 95%;
+            }
+            #special-modal {
+                width: 95%;
+                padding: 15px;
+            }
+            .special-container {
+                flex-direction: column;
+            }
+            .special-description {
+                height: auto;
+                min-height: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 18px;
+                text-shadow: 0 0 3px var(--primary-color), 0 0 5px var(--primary-color);
+            }
+            html, body {
+                overflow: auto;
+            }
+            .main-container {
+                padding: 5px;
+            }
+            .logo {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .title h1 {
+                font-size: 1.2rem;
+            }
+            .title p {
+                font-size: 0.8rem;
+            }
+            .nav-bar {
+                padding: 5px 0;
+                justify-content: center;
+            }
+            .nav-bar button {
+                font-size: 0.9rem;
+                margin: 2px;
+            }
+            .content-area {
+                padding: 10px;
+            }
+            .footer {
+                font-size: 0.8rem;
+            }
+            #boot-overlay h1 {
+                font-size: 2rem;
+            }
+            #boot-overlay p {
+                font-size: 1rem;
+            }
+            .modal h2 {
+                font-size: 1.5rem;
+            }
+            .modal input, .modal button {
+                font-size: 1rem;
+            }
+            .character-identity {
+                flex-direction: column;
+            }
+            .character-identity input {
+                width: 100%;
+            }
+            .stat {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                padding: 8px;
+            }
+            .stat-name {
+                font-size: 1.2rem;
+            }
+            .stat-controls {
+                align-self: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 16px;
+            }
+            .title h1 {
+                font-size: 1rem;
+            }
+            .system-status {
+                font-size: 0.9rem;
+            }
+            #clock {
+                font-size: 1rem;
+            }
+            .nav-bar {
+                /* Permet le défilement horizontal si les boutons dépassent */
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                justify-content: flex-start;
+                -webkit-overflow-scrolling: touch; /* Pour un défilement fluide sur iOS */
+                scrollbar-width: thin; /* Pour Firefox */
+            }
+            .nav-bar::-webkit-scrollbar {
+                height: 4px;
+            }
+            .nav-bar::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+            }
+            .nav-bar button {
+                flex-shrink: 0; /* Empêche les boutons de rétrécir */
+            }
+            .special-stats {
+                gap: 5px;
+            }
+            .stat-controls button {
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                font-size: 1.2rem;
+            }
+            .stat-value {
+                font-size: 1.2rem;
+            }
+        }
+
     </style>
 </head>
 <body>
