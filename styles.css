@@ -161,7 +161,8 @@ pre{
 }
 pre::after{
   content:var(--pip-cursor);
-  position:absolute;
+  display:inline-block;
+  width:1ch;
   margin-left:6px;
   animation: blink .9s steps(2,end) infinite;
   opacity:.9;
