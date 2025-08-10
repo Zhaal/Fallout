@@ -54,7 +54,8 @@
             background-color: var(--color-black);
             color: var(--primary-color);
             font-family: 'VT323', monospace;
-            font-size: 20px;
+            font-size: 24px;
+            line-height: 1.6;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -306,7 +307,7 @@
             overflow-y: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
-            line-height: 1.4;
+            line-height: 1.6;
         }
         
         .content-area::-webkit-scrollbar {
@@ -327,7 +328,7 @@
         .cursor {
             display: inline-block;
             width: 10px;
-            height: 20px;
+            height: 1em;
             background: var(--primary-color);
             animation: blink 1s step-end infinite;
             vertical-align: bottom;
@@ -644,14 +645,13 @@ Bienvenue dans "Abri 202 : L'Arche". Ce jeu de rôle explore des thèmes de cont
                             textContentElement.textContent += text.charAt(i);
                             i++;
                         }
-                        playSound('audio-key');
                         textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
                     } else {
                         clearInterval(typingInterval);
                         typingInterval = null;
                         onComplete();
                     }
-                }, 10); // Vitesse de frappe
+                }, 5); // Vitesse de frappe
             }
 
             // Afficher le contenu d'un onglet
