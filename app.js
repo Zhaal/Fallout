@@ -201,8 +201,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
   setupTheme();
   qs('#connectBtn')?.addEventListener('click', ()=>{
     play('connect');
+    initApp();
     qs('#landing')?.classList.add('hidden');
     qs('#app')?.classList.remove('hidden');
-    initApp();
   });
 });
