@@ -4,6 +4,24 @@
 const qs = (s, el=document) => el.querySelector(s);
 const qsa = (s, el=document) => [...el.querySelectorAll(s)];
 
+const SFX = {
+  connect: 'Connect-pipboy.wav',
+  modal: 'accès-protégé.wav',
+  amberOn: 'ambre-on.wav',
+  amberOff: 'ambre-off.wav',
+  passOk: 'mdp-ok.wav',
+  passNo: 'mdp-no.wav'
+};
+
+function playSfx(name){
+  const src = SFX[name];
+  if(!src) return;
+  try{
+    const audio = new Audio(src);
+    audio.play();
+  }catch(e){}
+}
+
 const clock = () => {
   const el = qs('#clock');
   const pad = n => String(n).padStart(2,'0');
@@ -87,6 +105,7 @@ function setupTabs(){
       // Prompt
       modalTarget.textContent = btn.textContent;
       passInput.value = '';
+      playSfx('modal');
       passModal.showModal();
 
       passModal.addEventListener('close', function handler(){
@@ -95,10 +114,10 @@ function setupTabs(){
           const entered = passInput.value.trim();
           if(entered === pass){
             grantAccess(key);
-            soundFX('ok');
+            playSfx('passOk');
             showPane(id);
           }else{
-            soundFX('deny');
+            playSfx('passNo');
             passModal.querySelector('.modal-card').animate(
               [{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],
               {duration:180, iterations:1}
@@ -116,18 +135,17 @@ function setupTabs(){
 function typeInEffect(){
   const pane = qs('.pane.is-visible pre');
   if(!pane) return;
-  const text = pane.textContent;
+  const lines = pane.textContent.split('\n');
   pane.textContent = '';
   let i = 0;
-  // hide cursor while typing
   pane.style.setProperty('--pip-cursor', '" "');
   const step = () => {
-    const chunk = text.slice(i, i + Math.max(3, 8 + Math.floor(Math.random()*6)));
-    pane.textContent += chunk;
-    i += chunk.length;
-    if(i < text.length) {
-      setTimeout(step, 6 + Math.random()*18);
-    } else {
+    pane.textContent += lines[i];
+    if(i < lines.length - 1) pane.textContent += '\n';
+    i++;
+    if(i < lines.length){
+      setTimeout(step, 150);
+    }else{
       pane.style.setProperty('--pip-cursor', '"▮"');
     }
   };
@@ -151,6 +169,18 @@ function keyboardShortcuts(){
   });
 }
 
+function setupPreHome(){
+  const overlay = qs('#preHome');
+  const btn = qs('#connectBtn');
+  if(!overlay || !btn) return;
+  btn.addEventListener('click', ()=>{
+    playSfx('connect');
+    overlay.classList.add('is-hidden');
+    loadPayloads();
+    typeInEffect();
+  });
+}
+
 function setupTheme(){
   const root = document.documentElement;
   const toggle = qs('#themeToggle');
@@ -162,12 +192,12 @@ function setupTheme(){
     const theme = toggle.checked ? 'amber' : 'green';
     root.setAttribute('data-theme', theme);
     localStorage.setItem('vt.theme', theme);
-    soundFX('open');
+    playSfx(theme === 'amber' ? 'amberOn' : 'amberOff');
   });
 
   document.addEventListener('keydown', (e)=>{
-    if(e.key.toLowerCase()==='g'){ root.setAttribute('data-theme','green'); if(toggle) toggle.checked=false; localStorage.setItem('vt.theme','green'); soundFX('open'); }
-    if(e.key.toLowerCase()==='a'){ root.setAttribute('data-theme','amber'); if(toggle) toggle.checked=true;  localStorage.setItem('vt.theme','amber'); soundFX('open'); }
+    if(e.key.toLowerCase()==='g'){ root.setAttribute('data-theme','green'); if(toggle) toggle.checked=false; localStorage.setItem('vt.theme','green'); playSfx('amberOff'); }
+    if(e.key.toLowerCase()==='a'){ root.setAttribute('data-theme','amber'); if(toggle) toggle.checked=true;  localStorage.setItem('vt.theme','amber'); playSfx('amberOn'); }
   });
 }
 
@@ -177,7 +207,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   loadPayloads();
   setupTheme();
   setupTabs();
-  typeInEffect();
+  setupPreHome();
   keyboardShortcuts();
   soundFX('open'); // boot
 });
