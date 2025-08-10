@@ -726,8 +726,10 @@
         }
 
         .citizen-stats {
-            font-size: 0.9rem;
-            color: var(--dark-color);
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 3px var(--primary-color);
+            margin-top: 5px;
         }
 
         .delete-citizen-btn {
@@ -737,6 +739,12 @@
             padding: 4px 8px;
             font-size: 0.9rem;
             cursor: pointer;
+        }
+
+        /* --- STYLES MODAL D'ALERTE --- */
+        #alert-modal-title.error-title {
+            color: var(--color-error);
+            text-shadow: 0 0 5px var(--color-error);
         }
 
     </style>
@@ -887,6 +895,15 @@
         </div>
     </div>
 
+    <!-- MODAL D'ALERTE GÉNÉRIQUE -->
+    <div class="modal-overlay" id="alert-modal-overlay">
+        <div id="alert-modal" class="modal">
+            <h2 id="alert-modal-title"></h2>
+            <p id="alert-modal-body"></p>
+            <button id="alert-modal-close-btn">OK</button>
+        </div>
+    </div>
+
     <!-- EFFETS SONORES -->
     <audio id="audio-connect" src="Connect-pipboy.wav" preload="auto"></audio>
     <audio id="audio-protected" src="accès-protégé.wav" preload="auto"></audio>
@@ -938,6 +955,11 @@
             const mailBtn = document.getElementById('mail-btn');
             const mailModalOverlay = document.getElementById('mail-modal-overlay');
             const mailModal = document.getElementById('mail-modal');
+
+            const alertModalOverlay = document.getElementById('alert-modal-overlay');
+            const alertModalTitle = document.getElementById('alert-modal-title');
+            const alertModalBody = document.getElementById('alert-modal-body');
+            const alertModalCloseBtn = document.getElementById('alert-modal-close-btn');
 
 
             // --- FONCTION SON ---
@@ -1302,10 +1324,27 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                                         biometricButton.textContent = 'Enregistrement Biométrique';
                                         biometricButton.className = 'biometric-button';
 
-                                        biometricButton.addEventListener('click', () => {
+                                        biometricButton.addEventListener('click', async () => {
                                             playSound('audio-button');
-                                            initializeSpecialModal();
-                                            specialModalOverlay.classList.add('visible');
+
+                                            // Check character limit
+                                            try {
+                                                const response = await fetch('/.netlify/functions/get-characters');
+                                                const characters = await response.json();
+
+                                                if (response.ok && characters.length >= 7) {
+                                                    showAlert(
+                                                        "ACCÈS REFUSÉ",
+                                                        "Le nombre maximum de 7 habitants pour cette expérience a été atteint. Aucun enregistrement supplémentaire n'est autorisé.",
+                                                        true // isError = true
+                                                    );
+                                                } else {
+                                                    initializeSpecialModal();
+                                                    specialModalOverlay.classList.add('visible');
+                                                }
+                                            } catch (error) {
+                                                showAlert("ERREUR SYSTÈME", `Impossible de vérifier la liste des citoyens. Erreur: ${error.message}`, true);
+                                            }
                                         });
 
                                         textContentElement.appendChild(biometricButton);
@@ -1621,6 +1660,16 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             });
 
 
+            // --- ALERTE MODALE PERSONNALISÉE ---
+            function showAlert(title, message, isError = false) {
+                alertModalTitle.textContent = title;
+                alertModalBody.textContent = message;
+                alertModalTitle.classList.toggle('error-title', isError);
+                alertModalOverlay.classList.add('visible');
+                playSound(isError ? 'audio-mdp-no' : 'audio-protected');
+            }
+
+
             // --- LOGIQUE MESSAGERIE ---
 
             let loggedInCharacter = null;
@@ -1668,12 +1717,10 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 }
 
                 citizens.forEach(citizen => {
-                    // Get top 3 stats
+                    // Get all stats
                     const stats = Object.entries(citizen.special)
-                        .sort(([, a], [, b]) => b.value - a.value)
-                        .slice(0, 3)
-                        .map(([key, stat]) => `${key}: ${stat.value}`)
-                        .join(', ');
+                        .map(([key, stat]) => `${key}:${stat.value}`)
+                        .join(' | ');
 
                     const entry = document.createElement('div');
                     entry.className = 'citizen-entry';
@@ -1764,6 +1811,10 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             closeCitizensModalBtn.addEventListener('click', () => {
                 playSound('audio-button');
                 citizensModalOverlay.classList.remove('visible');
+            });
+
+            alertModalCloseBtn.addEventListener('click', () => {
+                alertModalOverlay.classList.remove('visible');
             });
 
             mailModalOverlay.addEventListener('click', (e) => {
