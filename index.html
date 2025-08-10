@@ -931,6 +931,8 @@
     <audio id="audio-mdp-no" src="mdp-no.wav" preload="auto"></audio>
     <audio id="audio-key" src="clavier.wav" preload="auto"></audio>
     <audio id="audio-button" src="bouton.wav" preload="auto"></audio>
+    <audio id="audio-mail" src="mail.wav" preload="auto"></audio>
+    <audio id="audio-page" src="page.wav" preload="auto"></audio>
 
     <!--
     /**********************************\
@@ -1395,7 +1397,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 if (!button || button.classList.contains('active')) return;
 
                 triggerGlitchEffect(mainInterface);
-                playSound('audio-button');
+                playSound('audio-page');
 
                 const tabId = button.dataset.tab;
                 const requiredPassword = button.dataset.password;
@@ -1791,7 +1793,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             }
 
             async function showRegisteredCitizens() {
-                playSound('audio-button');
+                playSound('audio-page');
                 citizensModalOverlay.classList.add('visible');
                 citizensListContainer.innerHTML = '<p>Chargement...</p>';
 
@@ -1846,7 +1848,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             navBar.addEventListener('click', handleNavClick);
             registeredCitizensBtn.addEventListener('click', showRegisteredCitizens);
             mailBtn.addEventListener('click', () => {
-                playSound('audio-button');
+                playSound('audio-mail');
                 mailModalOverlay.classList.add('visible');
                 showMailLogin();
             });
