@@ -66,5 +66,39 @@
         "value": 1
       }
     }
+  },
+  {
+    "nom": "sdfs",
+    "prenoms": "sdfsdf",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 10
+      },
+      "P": {
+        "name": "Perception",
+        "value": 9
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 5
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 1
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 1
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 1
+      },
+      "L": {
+        "name": "Chance",
+        "value": 1
+      }
+    }
   }
 ]
