@@ -198,17 +198,6 @@ dialog::backdrop{ background: rgba(2,6,12,.6); backdrop-filter: blur(3px) }
   background:#0c1524; color:var(--text); cursor:pointer;
 }
 .btn.primary{ border-color: rgba(125,255,155,.6); box-shadow: 0 0 18px rgba(125,255,155,.2) }
-
-.hidden{ display:none }
-.landing{
-  position:fixed; inset:0;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  background:var(--bg);
-  text-align:center; gap:20px;
-  z-index:900;
-}
-.landing .brand-text{ text-align:center }
-.landing .brand-text h1{ margin:0; font-size:22px }
 .btn.ghost{ background:transparent }
 
 /* Footer */

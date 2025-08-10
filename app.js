@@ -42,22 +42,6 @@ function soundFX(type='open'){
   }catch(e){}
 }
 
-const audio = {
-  connect: new Audio('Connect-pipboy.wav'),
-  modal: new Audio('accès-protégé.wav'),
-  amberOn: new Audio('ambre-on.wav'),
-  amberOff: new Audio('ambre-off.wav'),
-  mdpOk: new Audio('mdp-ok.wav'),
-  mdpNo: new Audio('mdp-no.wav')
-};
-function play(name){
-  const a = audio[name];
-  if(a){
-    a.currentTime = 0;
-    a.play().catch(()=>{});
-  }
-}
-
 function setupTabs(){
   const passModal = qs('#passModal');
   const passInput = qs('#passInput');
@@ -104,7 +88,6 @@ function setupTabs(){
       modalTarget.textContent = btn.textContent;
       passInput.value = '';
       passModal.showModal();
-      play('modal');
 
       passModal.addEventListener('close', function handler(){
         passModal.removeEventListener('close', handler);
@@ -112,10 +95,10 @@ function setupTabs(){
           const entered = passInput.value.trim();
           if(entered === pass){
             grantAccess(key);
-            play('mdpOk');
+            soundFX('ok');
             showPane(id);
           }else{
-            play('mdpNo');
+            soundFX('deny');
             passModal.querySelector('.modal-card').animate(
               [{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],
               {duration:180, iterations:1}
@@ -171,54 +154,30 @@ function keyboardShortcuts(){
 function setupTheme(){
   const root = document.documentElement;
   const toggle = qs('#themeToggle');
-  let saved = 'green';
-  try {
-    saved = localStorage.getItem('vt.theme') || 'green';
-  } catch (e) {
-    // storage unavailable
-  }
+  const saved = localStorage.getItem('vt.theme') || 'green';
   root.setAttribute('data-theme', saved);
   if(saved === 'amber' && toggle) toggle.checked = true;
 
   toggle?.addEventListener('change', ()=>{
     const theme = toggle.checked ? 'amber' : 'green';
     root.setAttribute('data-theme', theme);
-    try { localStorage.setItem('vt.theme', theme); } catch (e) {}
-    play(theme === 'amber' ? 'amberOn' : 'amberOff');
+    localStorage.setItem('vt.theme', theme);
+    soundFX('open');
   });
 
   document.addEventListener('keydown', (e)=>{
-    const k = e.key.toLowerCase();
-    if(k==='g'){
-      root.setAttribute('data-theme','green');
-      if(toggle) toggle.checked=false;
-      try { localStorage.setItem('vt.theme','green'); } catch (e) {}
-      play('amberOff');
-    }
-    if(k==='a'){
-      root.setAttribute('data-theme','amber');
-      if(toggle) toggle.checked=true;
-      try { localStorage.setItem('vt.theme','amber'); } catch (e) {}
-      play('amberOn');
-    }
+    if(e.key.toLowerCase()==='g'){ root.setAttribute('data-theme','green'); if(toggle) toggle.checked=false; localStorage.setItem('vt.theme','green'); soundFX('open'); }
+    if(e.key.toLowerCase()==='a'){ root.setAttribute('data-theme','amber'); if(toggle) toggle.checked=true;  localStorage.setItem('vt.theme','amber'); soundFX('open'); }
   });
-}
-
-function initApp(){
-  clock();
-  loadPayloads();
-  setupTabs();
-  typeInEffect();
-  keyboardShortcuts();
 }
 
 // Init
 window.addEventListener('DOMContentLoaded', ()=>{
-  try { setupTheme(); } catch (e) {}
-  qs('#connectBtn')?.addEventListener('click', ()=>{
-    play('connect');
-    initApp();
-    qs('#landing')?.classList.add('hidden');
-    qs('#app')?.classList.remove('hidden');
-  });
+  clock();
+  loadPayloads();
+  setupTheme();
+  setupTabs();
+  typeInEffect();
+  keyboardShortcuts();
+  soundFX('open'); // boot
 });
