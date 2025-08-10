@@ -716,8 +716,18 @@
             border-bottom: none;
         }
 
+        .citizen-info {
+            display: flex;
+            flex-direction: column;
+        }
+
         .citizen-name {
             font-size: 1.2rem;
+        }
+
+        .citizen-stats {
+            font-size: 0.9rem;
+            color: var(--dark-color);
         }
 
         .delete-citizen-btn {
@@ -1658,10 +1668,20 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 }
 
                 citizens.forEach(citizen => {
+                    // Get top 3 stats
+                    const stats = Object.entries(citizen.special)
+                        .sort(([, a], [, b]) => b.value - a.value)
+                        .slice(0, 3)
+                        .map(([key, stat]) => `${key}: ${stat.value}`)
+                        .join(', ');
+
                     const entry = document.createElement('div');
                     entry.className = 'citizen-entry';
                     entry.innerHTML = `
-                        <span class="citizen-name">${citizen.prenoms} ${citizen.nom}</span>
+                        <div class="citizen-info">
+                            <span class="citizen-name">${citizen.prenoms} ${citizen.nom}</span>
+                            <span class="citizen-stats">Top Stats: ${stats}</span>
+                        </div>
                         <button class="delete-citizen-btn" data-id="${citizen.id}">Supprimer</button>
                     `;
                     citizensListContainer.appendChild(entry);
