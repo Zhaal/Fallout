@@ -83,48 +83,5 @@
         "body": "Félicitations, Boris Porchin !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
-  },
-  {
-    "id": "Muig-1754862051704",
-    "nom": "Muig",
-    "prenoms": "Stelo",
-    "hashedPassword": "$2a$10$8GgzMs2Ku5lXJ8vkZ89Iv.Y10WFS6T2TAXKr0ZmiLUBZ40oW67vUO",
-    "special": {
-      "S": {
-        "name": "Force",
-        "value": 5
-      },
-      "P": {
-        "name": "Perception",
-        "value": 5
-      },
-      "E": {
-        "name": "Endurance",
-        "value": 5
-      },
-      "C": {
-        "name": "Charisme",
-        "value": 5
-      },
-      "I": {
-        "name": "Intelligence",
-        "value": 6
-      },
-      "A": {
-        "name": "Agilité",
-        "value": 1
-      },
-      "L": {
-        "name": "Chance",
-        "value": 1
-      }
-    },
-    "role": "SUPERVISEUR ARCHE",
-    "emails": [
-      {
-        "from": "Vault-Tec Corporation",
-        "body": "Félicitations, Stelo Muig !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
-      }
-    ]
   }
 ]
