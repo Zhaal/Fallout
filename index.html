@@ -576,8 +576,8 @@
                 <span class="nuka-trademark">®</span>
             </div>
             <div class="nuka-body">
-                <p class="nuka-slogan">ZAP THAT THIRST!</p>
-                <p>Enjoy a refreshing bottle of Nuka-Cola today!</p>
+                <p class="nuka-slogan">DOUBLEZ VOS POINTS D'ACTION !</p>
+                <p>Une capsule, un sourire ! Nuka-Cola, le rafraîchissement officiel du futur !</p>
             </div>
             <button id="nuka-close-btn">Fermer</button>
         </div>
@@ -591,6 +591,7 @@
     <audio id="audio-mdp-ok" src="mdp-ok.wav" preload="auto"></audio>
     <audio id="audio-mdp-no" src="mdp-no.wav" preload="auto"></audio>
     <audio id="audio-key" src="clavier.wav" preload="auto"></audio>
+    <audio id="audio-button" src="bouton.wav" preload="auto"></audio>
 
     <!--
     /**********************************\
@@ -971,6 +972,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                             docInfo.style.fontSize = '0.9rem';
 
                             signButton.addEventListener('click', () => {
+                                playSound('audio-button');
                                 textContentElement.style.opacity = '0';
                                 setTimeout(() => {
                                     typeWriter(officialDocument);
@@ -993,6 +995,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             function handleNavClick(e) {
                 const button = e.target.closest('button');
                 if (!button) return;
+                playSound('audio-button');
 
                 const tabId = button.dataset.tab;
                 const requiredPassword = button.dataset.password;
