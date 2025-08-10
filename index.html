@@ -1853,6 +1853,25 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     return;
                 }
 
+                // Custom sort to prioritize supervisors
+                citizens.sort((a, b) => {
+                    const getRolePriority = (role) => {
+                        if (role === 'SUPERVISEUR ARCHE') return 1; // Supervisor A
+                        if (role === 'SUPERVISEUR HABITAT') return 2; // Supervisor H
+                        return 3; // Other citizens
+                    };
+
+                    const priorityA = getRolePriority(a.role);
+                    const priorityB = getRolePriority(b.role);
+
+                    if (priorityA !== priorityB) {
+                        return priorityA - priorityB;
+                    }
+
+                    // If roles have the same priority, sort by name
+                    return a.nom.localeCompare(b.nom);
+                });
+
                 citizens.forEach(citizen => {
                     // Get all stats
                     const stats = Object.entries(citizen.special)
@@ -1881,6 +1900,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 playSound('audio-page');
                 citizensModalOverlay.classList.add('visible');
                 citizensListContainer.innerHTML = '<p>Chargement...</p>';
+                const modalTitle = document.querySelector('#citizens-modal h2');
 
                 try {
                     const response = await fetch('/.netlify/functions/get-characters');
@@ -1889,8 +1909,10 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                         throw new Error(errorData.error || 'Erreur serveur');
                     }
                     const citizens = await response.json();
+                    modalTitle.textContent = `Citoyens Enregistrés (${citizens.length}/7)`;
                     renderCitizensList(citizens);
                 } catch (error) {
+                    modalTitle.textContent = 'Citoyens Enregistrés'; // Reset title on error
                     citizensListContainer.innerHTML = `<p style="color: var(--color-error);">Erreur: ${error.message}</p>`;
                 }
             }
