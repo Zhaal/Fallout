@@ -41,5 +41,49 @@
         "body": "Félicitations, Sue Perkins !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
+  },
+  {
+    "id": "Celsius-1754922696054",
+    "nom": "Celsius",
+    "prenoms": "Marks",
+    "playerName": "James",
+    "hashedPassword": "$2a$10$EANLPojIdPrx3t8HhfIptO1N1tIQWPn7Fajz3pMxg/g4j3btPrKo2",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 4
+      },
+      "P": {
+        "name": "Perception",
+        "value": 3
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 2
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 5
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 6
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 2
+      },
+      "L": {
+        "name": "Chance",
+        "value": 6
+      }
+    },
+    "role": "SUPERVISEUR ARCHE",
+    "emails": [
+      {
+        "from": "Vault-Tec Corporation",
+        "body": "Félicitations, Marks Celsius !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
+      }
+    ]
   }
 ]
