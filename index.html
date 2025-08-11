@@ -1209,7 +1209,7 @@
                 const audio = document.getElementById(id);
                 if (audio) {
                     const clone = audio.cloneNode();
-                    clone.play();
+                    clone.play().catch(e => {});
                 }
             }
             document.addEventListener('keydown', () => playSound('audio-key'));
@@ -1511,6 +1511,65 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 onComplete();
             }
 
+            // Affiche le texte avec un effet de frappe style Vault-Tec
+            function typeVaultTec(text, onComplete = () => {}) {
+                if (typingInterval) clearTimeout(typingInterval);
+
+                // Découpe le texte en morceaux normaux et en gras (entourés de **)
+                const chunks = text.split(/(\*\*.*?\*\*)/).filter(Boolean);
+                let currentChunkIndex = 0;
+                let currentCharIndex = 0;
+
+                let currentContainer = textContentElement;
+
+                textContentElement.innerHTML = '';
+                cursorElement.style.display = 'inline-block';
+                const typingSpeed = 1; // Vitesse de frappe en ms
+
+                function type() {
+                    if (currentChunkIndex >= chunks.length) {
+                        if (onComplete) onComplete();
+                        return;
+                    }
+
+                    let chunk = chunks[currentChunkIndex];
+                    const isBold = chunk.startsWith('**') && chunk.endsWith('**');
+                    const content = isBold ? chunk.slice(2, -2) : chunk;
+
+                    if (currentCharIndex >= content.length) {
+                        // Passer au morceau suivant
+                        currentChunkIndex++;
+                        currentCharIndex = 0;
+                        // S'assurer que le conteneur redevient le principal pour le texte normal
+                        currentContainer = textContentElement;
+                        type();
+                        return;
+                    }
+
+                    if (isBold && currentCharIndex === 0) {
+                        // Créer un nouvel élément <strong> pour ce morceau
+                        const strongEl = document.createElement('strong');
+                        textContentElement.appendChild(strongEl);
+                        currentContainer = strongEl;
+                    }
+
+                    const char = content[currentCharIndex];
+                    if (char === '\n') {
+                        currentContainer.appendChild(document.createElement('br'));
+                    } else {
+                        // Ajoute le caractère au conteneur actuel (soit le principal, soit le <strong>)
+                        currentContainer.append(char);
+                    }
+
+                    if (currentCharIndex % 5 === 0) playSound('audio-key');
+                    textContentElement.parentElement.scrollTop = textContentElement.parentElement.scrollHeight;
+
+                    currentCharIndex++;
+                    typingInterval = setTimeout(type, typingSpeed);
+                }
+                type();
+            }
+
             // Afficher le contenu d'un onglet
             function displayTabContent(tabId) {
                 currentTab = tabId;
@@ -1600,7 +1659,9 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                             textContentElement.appendChild(signatureArea);
                         });
                     } else {
-                        typeWriter(contentData[tabId], () => {
+                        const onCompleteCallback = () => {
+                            // Cette fonction est appelée une fois que le texte a fini de s'afficher.
+                            // Elle ajoute le bouton d'enregistrement uniquement pour les superviseurs.
                             if (tabId === 'superviseurH' || tabId === 'superviseurA') {
                                 const supervisorButton = document.createElement('button');
                                 supervisorButton.textContent = "Superviseur, merci de vous enregistrer 'Enregistrement Biométrique'";
@@ -1615,7 +1676,14 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
 
                                 textContentElement.appendChild(supervisorButton);
                             }
-                        });
+                        };
+
+                        // Utiliser l'effet de frappe pour les superviseurs, et l'affichage instantané pour les autres.
+                        if (tabId === 'superviseurH' || tabId === 'superviseurA') {
+                            typeVaultTec(contentData[tabId], onCompleteCallback);
+                        } else {
+                            typeWriter(contentData[tabId], onCompleteCallback);
+                        }
                     }
                     textContentElement.style.opacity = '1'; // On affiche le nouveau contenu en fondu
                 }, 500); // On attend la fin de la transition
@@ -1632,19 +1700,17 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 const tabId = button.dataset.tab;
                 const requiredPassword = button.dataset.password;
 
-                setTimeout(() => {
-                    if (requiredPassword) {
-                        targetTabAfterPassword = tabId;
-                        passwordInput.value = '';
-                        passwordInput.classList.remove('error');
-                        modal.classList.remove('shake');
-                        modalOverlay.classList.add('visible');
-                        passwordInput.focus();
-                        playSound('audio-protected');
-                    } else {
-                        displayTabContent(tabId);
-                    }
-                }, 150);
+                if (requiredPassword) {
+                    targetTabAfterPassword = tabId;
+                    passwordInput.value = '';
+                    passwordInput.classList.remove('error');
+                    modal.classList.remove('shake');
+                    modalOverlay.classList.add('visible');
+                    passwordInput.focus();
+                    playSound('audio-protected');
+                } else {
+                    displayTabContent(tabId);
+                }
             }
             
             // --- NUKA-COLA POPUP LOGIC ---
