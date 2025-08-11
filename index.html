@@ -1079,6 +1079,9 @@
                 <input type="text" id="character-firstname" placeholder="Prénoms..." autocomplete="off">
             </div>
             <div class="character-password">
+                <input type="text" id="player-name" placeholder="Nom du Joueur..." autocomplete="off">
+            </div>
+            <div class="character-password">
                 <input type="password" id="character-password" placeholder="Mot de passe..." autocomplete="off">
             </div>
 
@@ -1748,6 +1751,8 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 Object.keys(stats).forEach(key => stats[key].value = 1);
                 characterLastnameInput.value = '';
                 characterFirstnameInput.value = '';
+                document.getElementById('player-name').value = '';
+                document.getElementById('character-password').value = '';
                 specialDescriptionBox.innerHTML = '<p>Survolez un attribut pour lire sa description.</p>';
                 renderSpecialStats();
             }
@@ -1883,10 +1888,16 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
             specialConfirmBtn.addEventListener('click', () => {
                 const lastname = characterLastnameInput.value.trim();
                 const firstname = characterFirstnameInput.value.trim();
+                const playerName = document.getElementById('player-name').value.trim();
                 const password = document.getElementById('character-password').value;
 
                 if (!lastname || !firstname) {
                     showAlert('ERREUR DE SAISIE', 'Veuillez renseigner le nom et les prénoms.', true);
+                    return;
+                }
+
+                if (!playerName) {
+                    showAlert('ERREUR DE SAISIE', 'Veuillez renseigner le nom du Joueur.', true);
                     return;
                 }
 
@@ -1903,6 +1914,7 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                 const characterData = {
                     nom: lastname,
                     prenoms: firstname,
+                    playerName: playerName,
                     password: password, // This will be hashed server-side
                     special: stats,
                     role: characterRoleToAssign // Add the role here
@@ -2039,9 +2051,14 @@ L’action se déroule dans l’univers post-apocalyptique de Fallout. Les bombe
                     // Conditionally add the role if it exists
                     const roleHTML = citizen.role ? `<span class="citizen-role">${citizen.role}</span>` : '';
 
+                    // Display player name if available
+                    const displayName = citizen.playerName
+                        ? `${citizen.prenoms} ${citizen.nom} (${citizen.playerName})`
+                        : `${citizen.prenoms} ${citizen.nom}`;
+
                     entry.innerHTML = `
                         <div class="citizen-info">
-                            <span class="citizen-name">${citizen.prenoms} ${citizen.nom}</span>
+                            <span class="citizen-name">${displayName}</span>
                             ${roleHTML}
                             <span class="citizen-stats">S.P.E.C.I.A.L: ${stats}</span>
                         </div>

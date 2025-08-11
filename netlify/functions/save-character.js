@@ -32,6 +32,7 @@ exports.handler = async function(event, context) {
         id: `${characterInput.nom}-${Date.now()}`, // Create a unique ID
         nom: characterInput.nom,
         prenoms: characterInput.prenoms,
+        playerName: characterInput.playerName,
         hashedPassword: hashedPassword,
         special: characterInput.special,
         role: characterInput.role, // Add role from input
