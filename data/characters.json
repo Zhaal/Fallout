@@ -1,8 +1,9 @@
 [
   {
     "id": "Perkins-1754861214399",
-    "nom": "Perkins (Gilles)",
+    "nom": "Perkins",
     "prenoms": "Sue",
+    "playerName": "Gilles",
     "hashedPassword": "$2a$10$LRiHx8eTAmDWfqPvhxv7luo4C/Fah1RxqfS1ZLAU5mA0V0YvzTSHq",
     "special": {
       "S": {
