@@ -41,49 +41,5 @@
         "body": "Félicitations, Sue Perkins !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
-  },
-  {
-    "id": "Upsilon-1754895399621",
-    "nom": "Upsilon",
-    "prenoms": "Zhaal",
-    "playerName": "Grégoire",
-    "hashedPassword": "$2a$10$Ns3JotSF8cb9pGn.u78ajumyMW3J5lDrsja3pj1/1Lx8gU8JE9wD.",
-    "special": {
-      "S": {
-        "name": "Force",
-        "value": 4
-      },
-      "P": {
-        "name": "Perception",
-        "value": 7
-      },
-      "E": {
-        "name": "Endurance",
-        "value": 7
-      },
-      "C": {
-        "name": "Charisme",
-        "value": 7
-      },
-      "I": {
-        "name": "Intelligence",
-        "value": 1
-      },
-      "A": {
-        "name": "Agilité",
-        "value": 1
-      },
-      "L": {
-        "name": "Chance",
-        "value": 1
-      }
-    },
-    "role": null,
-    "emails": [
-      {
-        "from": "Vault-Tec Corporation",
-        "body": "Félicitations, Zhaal Upsilon !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
-      }
-    ]
   }
 ]
