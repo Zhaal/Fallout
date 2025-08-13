@@ -129,5 +129,49 @@
         "body": "Félicitations, stacy van prat !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
+  },
+  {
+    "id": "binks-1755127323757",
+    "nom": "binks",
+    "prenoms": "jarjar",
+    "playerName": "Jackson Dayne",
+    "hashedPassword": "$2a$10$4JVVJILRJLGn0p/jtYzv9Okp1XbIWJuHv6lEc7KS.zWNs4dsQjiO6",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 2
+      },
+      "P": {
+        "name": "Perception",
+        "value": 4
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 1
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 9
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 9
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 1
+      },
+      "L": {
+        "name": "Chance",
+        "value": 2
+      }
+    },
+    "role": "SUPERVISEUR HABITAT",
+    "emails": [
+      {
+        "from": "Vault-Tec Corporation",
+        "body": "Félicitations, jarjar binks !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
+      }
+    ]
   }
 ]
