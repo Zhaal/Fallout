@@ -85,5 +85,49 @@
         "body": "Félicitations, Marks Celsius !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
+  },
+  {
+    "id": "van prat-1755068605466",
+    "nom": "van prat",
+    "prenoms": "stacy",
+    "playerName": "thomas",
+    "hashedPassword": "$2a$10$0GuOf4ll5sRaTR.eRFK4yOpyp70ZRGoOqaDnOaG2Qad07OsRgczVa",
+    "special": {
+      "S": {
+        "name": "Force",
+        "value": 1
+      },
+      "P": {
+        "name": "Perception",
+        "value": 6
+      },
+      "E": {
+        "name": "Endurance",
+        "value": 4
+      },
+      "C": {
+        "name": "Charisme",
+        "value": 6
+      },
+      "I": {
+        "name": "Intelligence",
+        "value": 4
+      },
+      "A": {
+        "name": "Agilité",
+        "value": 1
+      },
+      "L": {
+        "name": "Chance",
+        "value": 6
+      }
+    },
+    "role": null,
+    "emails": [
+      {
+        "from": "Vault-Tec Corporation",
+        "body": "Félicitations, stacy van prat !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
+      }
+    ]
   }
 ]
