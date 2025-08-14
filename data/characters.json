@@ -173,49 +173,5 @@
         "body": "Félicitations, jarjar binks !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
-  },
-  {
-    "id": "L-1755162568750",
-    "nom": "L",
-    "prenoms": "Pierre",
-    "playerName": "Pedro",
-    "hashedPassword": "$2a$10$fIxYHoVrC400zB3T3h5rn.3Kj1qE5jDyyvPdVhFrsu1Rfxw3Z2g4G",
-    "special": {
-      "S": {
-        "name": "Force",
-        "value": 4
-      },
-      "P": {
-        "name": "Perception",
-        "value": 4
-      },
-      "E": {
-        "name": "Endurance",
-        "value": 5
-      },
-      "C": {
-        "name": "Charisme",
-        "value": 3
-      },
-      "I": {
-        "name": "Intelligence",
-        "value": 4
-      },
-      "A": {
-        "name": "Agilité",
-        "value": 4
-      },
-      "L": {
-        "name": "Chance",
-        "value": 4
-      }
-    },
-    "role": null,
-    "emails": [
-      {
-        "from": "Vault-Tec Corporation",
-        "body": "Félicitations, Pierre L !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
-      }
-    ]
   }
 ]
