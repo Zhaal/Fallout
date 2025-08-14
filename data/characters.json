@@ -217,49 +217,5 @@
         "body": "Félicitations, Golien Raymond !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
-  },
-  {
-    "id": "Wesson-1755179698508",
-    "nom": "Wesson",
-    "prenoms": "Klint",
-    "playerName": "Nick",
-    "hashedPassword": "$2a$10$rHostCS0gb3RuBgsrB.EQO6m4CcKJBizDI00lZz/rMPHl9oggoAe.",
-    "special": {
-      "S": {
-        "name": "Force",
-        "value": 2
-      },
-      "P": {
-        "name": "Perception",
-        "value": 2
-      },
-      "E": {
-        "name": "Endurance",
-        "value": 2
-      },
-      "C": {
-        "name": "Charisme",
-        "value": 7
-      },
-      "I": {
-        "name": "Intelligence",
-        "value": 7
-      },
-      "A": {
-        "name": "Agilité",
-        "value": 2
-      },
-      "L": {
-        "name": "Chance",
-        "value": 6
-      }
-    },
-    "role": null,
-    "emails": [
-      {
-        "from": "Vault-Tec Corporation",
-        "body": "Félicitations, Klint Wesson !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
-      }
-    ]
   }
 ]
