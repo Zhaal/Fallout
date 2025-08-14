@@ -32,8 +32,8 @@ exports.handler = async function(event, context) {
         const content = Buffer.from(fileData.content, 'base64').toString('utf8');
         const characters = JSON.parse(content);
 
-        // Find character by name (case-insensitive)
-        const character = characters.find(char => char.nom.toLowerCase() === nom.toLowerCase());
+        // Find character by name or firstname (case-insensitive)
+        const character = characters.find(char => char.nom.toLowerCase() === nom.toLowerCase() || char.prenoms.toLowerCase() === nom.toLowerCase());
 
         if (!character) {
             return { statusCode: 404, body: JSON.stringify({ error: "Character not found." }) };
