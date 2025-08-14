@@ -217,49 +217,5 @@
         "body": "Félicitations, Golien Raymond !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
       }
     ]
-  },
-  {
-    "id": "test-1755167309038",
-    "nom": "test",
-    "prenoms": "azerty",
-    "playerName": "aqw",
-    "hashedPassword": "$2a$10$evwO4vlFB1XP9eQ3MymyOOknsbjmRZXcr8YwbsLphZnP0sNhFnBoK",
-    "special": {
-      "S": {
-        "name": "Force",
-        "value": 10
-      },
-      "P": {
-        "name": "Perception",
-        "value": 10
-      },
-      "E": {
-        "name": "Endurance",
-        "value": 4
-      },
-      "C": {
-        "name": "Charisme",
-        "value": 1
-      },
-      "I": {
-        "name": "Intelligence",
-        "value": 1
-      },
-      "A": {
-        "name": "Agilité",
-        "value": 1
-      },
-      "L": {
-        "name": "Chance",
-        "value": 1
-      }
-    },
-    "role": null,
-    "emails": [
-      {
-        "from": "Vault-Tec Corporation",
-        "body": "Félicitations, azerty test !\n\nVotre enregistrement à l'Abri 202 est confirmé. En cas de catastrophe nucléaire imminente, votre place est garantie. Vault-Tec vous remercie de votre confiance pour la construction d'un meilleur lendemain."
-      }
-    ]
   }
 ]
